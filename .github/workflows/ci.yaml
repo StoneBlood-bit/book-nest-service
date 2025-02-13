@@ -7,7 +7,7 @@ on:
   pull_request:
     branches:
       - main
-      - car-sharring-develop
+      - book-nest-develop
 
 jobs:
   build:
