@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: first-table-to-check
+      author: developer
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: bigint
