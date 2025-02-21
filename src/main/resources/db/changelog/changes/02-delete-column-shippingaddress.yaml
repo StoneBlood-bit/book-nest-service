@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: delete-column-shipping-address
+      author: developer
+      changes:
+        - dropColumn:
+            columnName: shipping_address
+            tableName: users

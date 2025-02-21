@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-default-value-tokens
+      author: developer
+      changes:
+        - addDefaultValue:
+            tableName: users
+            columnName: tokens
+            defaultValue: 0

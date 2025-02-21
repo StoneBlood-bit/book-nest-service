@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-column-tokens-into-users-table
+      author: developer
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: tokens
+                  type: int
+                  constraints:
+                    nullable: false
