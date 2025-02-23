@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import mate.academy.dto.user.UserLoginRequestDto;
 import mate.academy.dto.user.UserLoginResponseDto;
 import mate.academy.dto.user.UserRegistrationRequestDto;
@@ -36,7 +35,9 @@ public class AuthenticationController {
 
     @Operation(summary = "registration user", description = "registration a new user")
     @PostMapping("/registration")
-    public UserRegistrationResponseDto register(@RequestBody @Valid UserRegistrationRequestDto requestDto)
+    public UserRegistrationResponseDto register(
+            @RequestBody @Valid UserRegistrationRequestDto requestDto
+    )
             throws RegistrationException {
         return userService.register(requestDto);
     }
