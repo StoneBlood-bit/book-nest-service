@@ -1,18 +1,21 @@
 package mate.academy.service.google;
 
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import mate.academy.exception.AuthenticationException;
 import mate.academy.model.User;
 import mate.academy.repository.user.UserRepository;
 import mate.academy.security.JwtUtil;
 import org.springframework.core.env.Environment;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -23,10 +26,6 @@ public class GoogleOAuthService {
     private final Environment env;
 
     public String authenticationWithGoogle(String code) {
-        String tokenUri = env.getProperty("google.token-uri");
-        String clientId = env.getProperty("google.client-id");
-        String clientSecret = env.getProperty("google.client-secret");
-        String redirectUri = env.getProperty("google.redirect-uri");
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -34,10 +33,17 @@ public class GoogleOAuthService {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("code", code);
+
+        String redirectUri = env.getProperty("google.redirect-uri");
         params.add("redirect_uri", redirectUri);
+
+        String clientId = env.getProperty("google.client-id");
         params.add("client_id", clientId);
+
+        String clientSecret = env.getProperty("google.client-secret");
         params.add("client_secret", clientSecret);
 
+        String tokenUri = env.getProperty("google.token-uri");
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
         ResponseEntity<Map> response = restTemplate.postForEntity(tokenUri, request, Map.class);
 
