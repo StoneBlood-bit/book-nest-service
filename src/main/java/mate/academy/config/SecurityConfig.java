@@ -40,7 +40,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/books").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/books/**").permitAll()
                                 .requestMatchers(
-                                        "/auth/**", "/health",
+                                        "/auth/**", "/auth/callback/google/" , "/health",
                                         "/error", "/swagger-ui/**", "/v3/api-docs/**")
                                 .permitAll()
                                 .anyRequest()

@@ -28,7 +28,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final Map<String, List<String>> excludedPathsMap = Map.of(
             "/auth/", List.of("GET", "POST"),
             "/health", List.of("GET"),
-            "/books", List.of("GET")
+            "/books", List.of("GET"),
+            "/auth/callback/google/", List.of("GET")
     );
 
     @Override
