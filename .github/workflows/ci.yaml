@@ -7,7 +7,7 @@ on:
   pull_request:
     branches:
       - main
-      - car-sharring-develop
+      - book-nest-develop
 
 jobs:
   build:
@@ -26,3 +26,8 @@ jobs:
 
       - name: Build and test with Maven
         run: mvn --batch-mode --update-snapshots verify
+
+      - name: Deploy to Heroku
+        env:
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
