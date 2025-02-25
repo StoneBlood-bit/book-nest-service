@@ -24,12 +24,5 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Deploy to Heroku
-        env:
-          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-          FACEBOOK_CLIENT_ID: ${{ secrets.FACEBOOK_CLIENT_ID }}
-          FACEBOOK_CLIENT_SECRET: ${{ secrets.FACEBOOK_CLIENT_SECRET }}
-
       - name: Build and test with Maven
         run: mvn --batch-mode --update-snapshots verify
