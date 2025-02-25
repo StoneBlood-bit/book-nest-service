@@ -1,18 +1,21 @@
 package mate.academy.service.facebook;
 
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import mate.academy.exception.AuthenticationException;
 import mate.academy.model.User;
 import mate.academy.repository.user.UserRepository;
 import mate.academy.security.JwtUtil;
 import org.springframework.core.env.Environment;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor

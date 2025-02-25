@@ -11,6 +11,7 @@ import mate.academy.dto.user.UserRegistrationRequestDto;
 import mate.academy.dto.user.UserRegistrationResponseDto;
 import mate.academy.exception.RegistrationException;
 import mate.academy.security.AuthenticationService;
+import mate.academy.service.facebook.FacebookOAuthService;
 import mate.academy.service.google.GoogleOAuthService;
 import mate.academy.service.user.UserService;
 import org.springframework.http.ResponseEntity;
@@ -31,8 +32,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
     private final UserService userService;
     private final AuthenticationService authenticationService;
-
     private final GoogleOAuthService googleOAuthService;
+    private final FacebookOAuthService facebookOAuthService;
 
     @Operation(summary = "login user", description = "user authentication")
     @PostMapping("/login")
@@ -54,6 +55,15 @@ public class AuthenticationController {
             @RequestParam("code") String code
     ) {
         String token = googleOAuthService.authenticationWithGoogle(code);
+
+        return ResponseEntity.ok(Map.of("token", token));
+    }
+
+    @GetMapping("/callback/facebook")
+    public ResponseEntity<Map<String, String>> handleFacebookCallback(
+            @RequestParam("code") String code
+    ) {
+        String token = facebookOAuthService.authenticationWithFacebook(code);
 
         return ResponseEntity.ok(Map.of("token", token));
     }
