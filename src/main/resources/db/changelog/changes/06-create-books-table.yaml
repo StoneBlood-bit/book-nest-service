@@ -1,0 +1,62 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-books-table
+      author: developer
+      changes:
+        - createTable:
+            tableName: books
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: author
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: condition
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(1000)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: image
+                  type: blob
+                  constraints:
+                    nullable: true
+              - column:
+                  name: is_deleted
+                  type: tinyint(1)
+                  defaultValueBoolean: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: release_year
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: genre_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: books
+            baseColumnNames: genre_id
+            referencedTableName: genres
+            referencedColumnNames: id
+            constraintName: fk_genre
