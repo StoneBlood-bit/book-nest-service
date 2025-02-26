@@ -7,6 +7,9 @@ import mate.academy.exception.RegistrationException;
 import mate.academy.mapper.UserMapper;
 import mate.academy.model.User;
 import mate.academy.repository.user.UserRepository;
+import mate.academy.security.AuthenticationService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+    private static final Logger logger = LogManager.getLogger(AuthenticationService.class);
+
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
@@ -23,6 +28,7 @@ public class UserServiceImpl implements UserService {
     public UserRegistrationResponseDto register(
             UserRegistrationRequestDto requestDto
     ) {
+        logger.info("Method register was called, user: {}", requestDto.getEmail());
         if (userRepository.existsByEmail(requestDto.getEmail())) {
             throw new RegistrationException("User with email "
                     + requestDto.getEmail() + " already exists.");

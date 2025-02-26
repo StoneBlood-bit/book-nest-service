@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import mate.academy.dto.user.UserLoginRequestDto;
 import mate.academy.dto.user.UserLoginResponseDto;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,6 +14,8 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
+    private static final Logger logger = LogManager.getLogger(AuthenticationService.class);
+
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
     private final CookieUtil cookieUtil;
@@ -20,6 +24,7 @@ public class AuthenticationService {
             UserLoginRequestDto requestDto,
             HttpServletResponse response
     ) {
+        logger.info("authenticate method was called, user: = {}", requestDto.getEmail());
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         requestDto.getEmail(),
