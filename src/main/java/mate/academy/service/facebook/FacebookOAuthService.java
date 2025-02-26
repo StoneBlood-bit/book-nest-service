@@ -5,7 +5,10 @@ import lombok.RequiredArgsConstructor;
 import mate.academy.exception.AuthenticationException;
 import mate.academy.model.User;
 import mate.academy.repository.user.UserRepository;
+import mate.academy.security.AuthenticationService;
 import mate.academy.security.JwtUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +23,8 @@ import org.springframework.web.client.RestTemplate;
 @Service
 @RequiredArgsConstructor
 public class FacebookOAuthService {
+    private static final Logger logger = LogManager.getLogger(AuthenticationService.class);
+
     private final RestTemplate restTemplate = new RestTemplate();
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
@@ -73,6 +78,8 @@ public class FacebookOAuthService {
             newUser.setDeleted(false);
             return userRepository.save(newUser);
         });
+
+        logger.error("Method authenticationWithFacebook was called, user: {}", user.getEmail());
 
         return jwtUtil.generateToken(user.getEmail());
     }
