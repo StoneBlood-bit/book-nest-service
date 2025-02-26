@@ -2,6 +2,7 @@ package mate.academy.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import mate.academy.dto.user.UserRegistrationRequestDto;
 import mate.academy.dto.user.UserRegistrationResponseDto;
 import mate.academy.exception.RegistrationException;
 import mate.academy.security.AuthenticationService;
+import mate.academy.security.CookieUtil;
 import mate.academy.service.facebook.FacebookOAuthService;
 import mate.academy.service.google.GoogleOAuthService;
 import mate.academy.service.user.UserService;
@@ -34,11 +36,15 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
     private final GoogleOAuthService googleOAuthService;
     private final FacebookOAuthService facebookOAuthService;
+    private final CookieUtil cookieUtil;
 
     @Operation(summary = "login user", description = "user authentication")
     @PostMapping("/login")
-    public UserLoginResponseDto login(@RequestBody @Valid UserLoginRequestDto requestDto) {
-        return authenticationService.authenticate(requestDto);
+    public UserLoginResponseDto login(
+            @RequestBody @Valid UserLoginRequestDto requestDto,
+            HttpServletResponse response
+    ) {
+        return authenticationService.authenticate(requestDto, response);
     }
 
     @Operation(summary = "registration user", description = "registration a new user")
@@ -50,20 +56,26 @@ public class AuthenticationController {
         return userService.register(requestDto);
     }
 
+    @Operation(summary = "login user", description = "user authentication from Google")
     @GetMapping("/callback/google")
     public ResponseEntity<Map<String, String>> handleGoogleCallback(
-            @RequestParam("code") String code
+            @RequestParam("code") String code,
+            HttpServletResponse response
     ) {
         String token = googleOAuthService.authenticationWithGoogle(code);
+        cookieUtil.addTokenCookie(response, token);
 
         return ResponseEntity.ok(Map.of("token", token));
     }
 
+    @Operation(summary = "login user", description = "user authentication from Facebook")
     @GetMapping("/callback/facebook")
     public ResponseEntity<Map<String, String>> handleFacebookCallback(
-            @RequestParam("code") String code
+            @RequestParam("code") String code,
+            HttpServletResponse response
     ) {
         String token = facebookOAuthService.authenticationWithFacebook(code);
+        cookieUtil.addTokenCookie(response, token);
 
         return ResponseEntity.ok(Map.of("token", token));
     }
