@@ -1,6 +1,7 @@
 package mate.academy.security;
 
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import mate.academy.dto.user.UserLoginRequestDto;
 import mate.academy.dto.user.UserLoginResponseDto;
@@ -10,8 +11,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor

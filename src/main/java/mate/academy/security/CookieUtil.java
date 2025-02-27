@@ -2,9 +2,8 @@ package mate.academy.security;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.stereotype.Component;
-
 import java.io.IOException;
+import org.springframework.stereotype.Component;
 
 @Component
 public class CookieUtil {
