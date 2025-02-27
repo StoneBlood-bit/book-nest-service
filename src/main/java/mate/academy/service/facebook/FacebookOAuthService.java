@@ -23,6 +23,16 @@ import org.springframework.web.client.RestTemplate;
 @Service
 @RequiredArgsConstructor
 public class FacebookOAuthService {
+    private static final String PARAMS_CLIENT_ID = "client_id";
+    private static final String PARAMS_REDIRECT_URL = "redirect_uri";
+    private static final String PARAMS_CLIENT_SECRET = "client_secret";
+    private static final String CODE_NAME = "code";
+    private static final String PROPERTY_NAME_FACEBOOK_CLIENT_ID = "facebook.client-id";
+    private static final String PROPERTY_NAME_FACEBOOK_REDIRECT_URI = "facebook.redirect-uri";
+    private static final String PROPERTY_NAME_FACEBOOK_CLIENT_SECRET = "facebook.client-secret";
+    private static final String PROPERTY_NAME_FACEBOOK_TOKEN_URI = "facebook.token-uri";
+    private static final String PROPERTY_NAME_FACEBOOK_USER_INFO_URI = "facebook.user-info-uri";
+
     private static final Logger logger = LogManager.getLogger(AuthenticationService.class);
 
     private final RestTemplate restTemplate = new RestTemplate();
@@ -35,12 +45,12 @@ public class FacebookOAuthService {
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("client_id", env.getProperty("facebook.client-id"));
-        params.add("redirect_uri", env.getProperty("facebook.redirect-uri"));
-        params.add("client_secret", env.getProperty("facebook.client-secret"));
-        params.add("code", code);
+        params.add(PARAMS_CLIENT_ID, env.getProperty(PROPERTY_NAME_FACEBOOK_CLIENT_ID));
+        params.add(PARAMS_REDIRECT_URL, env.getProperty(PROPERTY_NAME_FACEBOOK_REDIRECT_URI));
+        params.add(PARAMS_CLIENT_SECRET, env.getProperty(PROPERTY_NAME_FACEBOOK_CLIENT_SECRET));
+        params.add(CODE_NAME, code);
 
-        String tokenUri = env.getProperty("facebook.token-uri");
+        String tokenUri = env.getProperty(PROPERTY_NAME_FACEBOOK_TOKEN_URI);
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
         ResponseEntity<Map> response = restTemplate.postForEntity(tokenUri, request, Map.class);
 
@@ -50,7 +60,7 @@ public class FacebookOAuthService {
 
         String accessToken = (String) response.getBody().get("access_token");
 
-        String userInfoUri = env.getProperty("facebook.user-info-uri");
+        String userInfoUri = env.getProperty(PROPERTY_NAME_FACEBOOK_USER_INFO_URI);
         HttpHeaders userinfoHeaders = new HttpHeaders();
         userinfoHeaders.setBearerAuth(accessToken);
 
