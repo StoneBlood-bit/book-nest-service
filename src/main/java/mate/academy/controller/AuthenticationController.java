@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import java.util.Map;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import mate.academy.dto.user.UserLoginRequestDto;
 import mate.academy.dto.user.UserLoginResponseDto;
@@ -16,7 +16,6 @@ import mate.academy.security.CookieUtil;
 import mate.academy.service.facebook.FacebookOAuthService;
 import mate.academy.service.google.GoogleOAuthService;
 import mate.academy.service.user.UserService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -58,25 +57,25 @@ public class AuthenticationController {
 
     @Operation(summary = "login user", description = "user authentication from Google")
     @GetMapping("/callback/google")
-    public ResponseEntity<Map<String, String>> handleGoogleCallback(
+    public void handleGoogleCallback(
             @RequestParam("code") String code,
             HttpServletResponse response
-    ) {
+    ) throws IOException {
         String token = googleOAuthService.authenticationWithGoogle(code);
         cookieUtil.addTokenCookie(response, token);
 
-        return ResponseEntity.ok(Map.of("token", token));
+        response.sendRedirect("https://driven-truly-mule.ngrok-free.app/redirect");
     }
 
     @Operation(summary = "login user", description = "user authentication from Facebook")
     @GetMapping("/callback/facebook")
-    public ResponseEntity<Map<String, String>> handleFacebookCallback(
+    public void handleFacebookCallback(
             @RequestParam("code") String code,
             HttpServletResponse response
-    ) {
+    ) throws IOException {
         String token = facebookOAuthService.authenticationWithFacebook(code);
         cookieUtil.addTokenCookie(response, token);
 
-        return ResponseEntity.ok(Map.of("token", token));
+        response.sendRedirect("https://driven-truly-mule.ngrok-free.app/redirect");
     }
 }
