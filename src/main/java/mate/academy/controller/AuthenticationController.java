@@ -42,7 +42,7 @@ public class AuthenticationController {
     public UserLoginResponseDto login(
             @RequestBody @Valid UserLoginRequestDto requestDto,
             HttpServletResponse response
-    ) {
+    ) throws IOException {
         return authenticationService.authenticate(requestDto, response);
     }
 

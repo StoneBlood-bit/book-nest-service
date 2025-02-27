@@ -4,6 +4,8 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+
 @Component
 public class CookieUtil {
     private static final String TOKEN_COOKIE_NAME = "token";
@@ -11,7 +13,11 @@ public class CookieUtil {
     private static final String COOKIE_ATTRIBUTE_VALUE = "None";
     private static final int COOKIE_MAX_AGE = 30 * 24 * 60 * 60;
 
-    public void addTokenCookie(HttpServletResponse response, String token) {
+    public void addTokenCookie(HttpServletResponse response, String token) throws IOException {
+        if (token == null || token.isBlank()) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid token");
+            return;
+        }
         Cookie cookie = new Cookie(TOKEN_COOKIE_NAME, token);
         cookie.setHttpOnly(true);
         cookie.setSecure(true);

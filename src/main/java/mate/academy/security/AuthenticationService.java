@@ -11,6 +11,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -23,7 +25,7 @@ public class AuthenticationService {
     public UserLoginResponseDto authenticate(
             UserLoginRequestDto requestDto,
             HttpServletResponse response
-    ) {
+    ) throws IOException {
         logger.info("authenticate method was called, user: = {}", requestDto.getEmail());
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
