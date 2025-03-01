@@ -20,7 +20,7 @@ public class ImageController {
     public ResponseEntity<byte[]> getImages(@PathVariable Long bookId) {
         byte[] image = imageService.getImage(bookId);
         HttpHeaders headers = new HttpHeaders();
-        headers.set(HttpHeaders.CONTENT_TYPE, "image/*");
+        headers.set(HttpHeaders.CONTENT_TYPE, "image/png");
         return new ResponseEntity<>(image, headers, HttpStatus.OK);
     }
 }
