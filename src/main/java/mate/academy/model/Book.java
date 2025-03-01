@@ -2,8 +2,6 @@ package mate.academy.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -37,9 +35,8 @@ public class Book {
     @Column(name = "release_year", nullable = false)
     private int releaseYear;
 
-    @Enumerated(value = EnumType.STRING)
-    @Column(nullable = false)
-    private Condition condition;
+    @Column(nullable = false, name = "`condition`")
+    private String condition;
 
     private String description;
 
@@ -52,11 +49,4 @@ public class Book {
 
     @Column(nullable = false, name = "is_deleted")
     private boolean isDeleted = false;
-
-    public enum Condition {
-        LIKE_NEW,
-        VERY_GOOD,
-        GOOD,
-        POOR
-    }
 }
