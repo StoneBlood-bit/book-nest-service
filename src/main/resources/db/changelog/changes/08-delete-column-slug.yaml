@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: delete-column-slug
+      author: developer
+      changes:
+        - dropColumn:
+            columnName: slug
+            tableName: books

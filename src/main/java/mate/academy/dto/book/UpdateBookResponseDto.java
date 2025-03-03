@@ -12,4 +12,5 @@ public class UpdateBookResponseDto {
     private String description;
     private byte[] image;
     private String genre;
+    private String slug;
 }

@@ -11,3 +11,7 @@ databaseChangeLog:
       file: db/changelog/changes/05-create-genres-table.yaml
   - include:
       file: db/changelog/changes/06-create-books-table.yaml
+  - include:
+      file: db/changelog/changes/07-add-column-slug-into-books.yaml
+  - include:
+      file: db/changelog/changes/08-delete-column-slug.yaml

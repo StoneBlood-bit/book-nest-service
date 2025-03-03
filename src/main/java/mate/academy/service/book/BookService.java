@@ -12,7 +12,7 @@ public interface BookService {
 
     BookResponseDto getById(Long id);
 
-    Page<BookResponseDto> findAll(Pageable pageable);
+    Page<BookResponseDto> findAll(String genre, String condition, Pageable pageable);
 
     UpdateBookResponseDto update(Long id, UpdateBookRequestDto requestDto);
 

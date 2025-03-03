@@ -40,6 +40,8 @@ public class Book {
 
     private String description;
 
+    private String slug;
+
     @Lob
     private byte[] image;
 

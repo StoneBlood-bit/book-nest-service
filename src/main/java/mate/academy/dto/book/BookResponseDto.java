@@ -9,5 +9,6 @@ public class BookResponseDto {
     private String author;
     private String condition;
     private String genre;
+    private String slug;
     private int releaseYear;
 }

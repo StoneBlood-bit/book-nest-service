@@ -1,8 +1,10 @@
 package mate.academy.service.user;
 
 import lombok.RequiredArgsConstructor;
+import mate.academy.dto.user.UserInfoResponseDto;
 import mate.academy.dto.user.UserRegistrationRequestDto;
 import mate.academy.dto.user.UserRegistrationResponseDto;
+import mate.academy.exception.EntityNotFoundException;
 import mate.academy.exception.RegistrationException;
 import mate.academy.mapper.UserMapper;
 import mate.academy.model.User;
@@ -39,5 +41,13 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
         return userMapper.toDto(user);
+    }
+
+    @Override
+    public UserInfoResponseDto getById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Can't find user with id: " + id)
+        );
+        return userMapper.toInfoDto(user);
     }
 }
