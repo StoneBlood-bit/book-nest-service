@@ -1,6 +1,7 @@
 package mate.academy.security;
 
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import mate.academy.dto.user.UserLoginRequestDto;
 import mate.academy.dto.user.UserLoginResponseDto;
@@ -23,7 +24,7 @@ public class AuthenticationService {
     public UserLoginResponseDto authenticate(
             UserLoginRequestDto requestDto,
             HttpServletResponse response
-    ) {
+    ) throws IOException {
         logger.info("authenticate method was called, user: = {}", requestDto.getEmail());
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
