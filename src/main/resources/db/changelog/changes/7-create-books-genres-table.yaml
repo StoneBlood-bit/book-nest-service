@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-books-genres-table
+      author: developer
+      changes:
+        - createTable:
+            tableName: books_genres
+            columns:
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: genre_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: books_genres
+            columnNames: book_id, genre_id
+        - addForeignKeyConstraint:
+            baseTableName: books_genres
+            baseColumnNames: book_id
+            constraintName: fk_books_genres_book
+            referencedTableName: books
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseTableName: books_genres
+            baseColumnNames: genre_id
+            constraintName: fk_books_genres_genre
+            referencedTableName: genres
+            referencedColumnNames: id

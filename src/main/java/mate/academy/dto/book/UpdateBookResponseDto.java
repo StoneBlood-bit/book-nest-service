@@ -1,5 +1,6 @@
 package mate.academy.dto.book;
 
+import java.util.List;
 import lombok.Data;
 
 @Data
@@ -10,7 +11,8 @@ public class UpdateBookResponseDto {
     private int releaseYear;
     private String condition;
     private String description;
-    private byte[] image;
-    private String genre;
     private String slug;
+    private String format;
+    private List<String> genres;
+    private byte[] image;
 }

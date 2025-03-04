@@ -138,7 +138,7 @@ Request:
 {
     "title": "The Best Of Me",
     "author": "Nicholas SparKs",
-    "genreId": 4,
+    "genreIds": [4, 5]
     "condition": "Like New",
     "description": "book for a tests"
 }
@@ -150,7 +150,11 @@ Response:
     "title": "The Best Of Me",
     "author": "Nicholas SparKs",
     "condition": "Like New",
-    "genre": "Fictions",
+    "genres": [
+        "Novella",
+        "Fictions"
+    ],
+    "format": "Hardcover"
     "slug": "nicholas-sparks-the-best-of-me-16",
     "releaseYear": 0
 }
@@ -163,12 +167,13 @@ Response:
     "title": "The Best Of Me",
     "author": "Nicholas SparKs",
     "condition": "Like New",
-    "genre": "Fictions",
+    "genres": ["Fictions"],
+    "format": "Hardcover"
     "slug": "nicholas-sparks-the-best-of-me-16",
     "releaseYear": 0
 }
 ````
-- **get all books** GET ``/books?genre=Fictions&condition=Like New&sort=title,asc``
+- **get all books** GET ``/books?genre=Fictions&condition=Like New&format=Hardcover&sort=title:asc``
 ````
 Response:
 {
@@ -178,7 +183,11 @@ Response:
             "title": "The Best Of Me",
             "author": "Nicholas SparKs",
             "condition": "Like New",
-            "genre": "Fictions",
+            "genres": [
+                "Novella",
+                "Fictions"
+            ],
+            "format": "Hardcover"
             "slug": "nicholas-sparks-the-best-of-me-16",
             "releaseYear": 0
         }
@@ -222,7 +231,8 @@ releaseYear: 2011
 condition: Like New
 description: new description
 file: image.png
-genreId: 2
+genreIds: 2, 3
+format: Hardcover
 ````
 ````
 Response:
@@ -234,7 +244,11 @@ Response:
     "condition": "Like New",
     "description": "New description",
     "image": "iVBORw0KGgoIApL152CVJVSf8O..." //Base64
-    "genre": "Fictions"
+    "format": "Hardcover"
+    "genres": [
+        "Novella",
+        "Fictions"
+    ]
     "slug": "nicholas-sparks-the-best-of-me-1"
 }
 ````
