@@ -1,6 +1,7 @@
 package mate.academy.dto.book;
 
 import jakarta.validation.constraints.Positive;
+import java.util.List;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,6 +13,7 @@ public class UpdateBookRequestDto {
     private int releaseYear;
     private String condition;
     private String description;
+    private String format;
+    private List<Long> genreIds;
     private MultipartFile file;
-    private Long genreId;
 }

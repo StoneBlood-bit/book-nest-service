@@ -1,17 +1,5 @@
 databaseChangeLog:
   - include:
-      file: db/changelog/changes/01-create-users-table.yaml
-  - include:
-      file: db/changelog/changes/02-delete-column-shippingaddress.yaml
-  - include:
-      file: db/changelog/changes/03-add-column-tokens-into-users-table.yaml
-  - include:
-      file: db/changelog/changes/04-add-default-value-tokens.yaml
-  - include:
-      file: db/changelog/changes/05-create-genres-table.yaml
-  - include:
       file: db/changelog/changes/06-create-books-table.yaml
   - include:
-      file: db/changelog/changes/07-add-column-slug-into-books.yaml
-  - include:
-      file: db/changelog/changes/08-delete-column-slug.yaml
+      file: db/changelog/changes/7-create-books-genres-table.yaml

@@ -1,6 +1,8 @@
 package mate.academy.service.book;
 
 import jakarta.persistence.criteria.Join;
+import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import mate.academy.component.SlugGenerator;
 import mate.academy.dto.book.BookRequestDto;
@@ -12,37 +14,38 @@ import mate.academy.mapper.BookMapper;
 import mate.academy.model.Book;
 import mate.academy.model.Genre;
 import mate.academy.repository.book.BookRepository;
-import mate.academy.repository.genre.GenreRepository;
 import mate.academy.security.AuthenticationService;
+import mate.academy.service.genre.GenreService;
 import mate.academy.service.image.ImageService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
+    private static final String DEFAULT_SORT_FIELD = "releaseYear";
+    private static final Sort.Direction DEFAULT_SORT_DIRECTION = Sort.Direction.ASC;
     private static final Logger logger = LogManager.getLogger(AuthenticationService.class);
-    private static final int SIZE_OF_PAGE = 12;
     private final BookRepository bookRepository;
-    private final GenreRepository genreRepository;
+    private final GenreService genreService;
     private final BookMapper bookMapper;
     private final ImageService imageService;
     private final SlugGenerator slugGenerator;
 
     @Override
     public BookResponseDto save(BookRequestDto requestDto) {
-        Genre genre = genreRepository.findById(requestDto.getGenreId()).orElseThrow(
-                () -> new EntityNotFoundException("Can't find genre with id: "
-                        + requestDto.getGenreId())
-        );
 
         Book book = bookMapper.toModel(requestDto);
-        book.setGenre(genre);
+
+        Set<Genre> genres = genreService.findByIds(requestDto.getGenreIds());
+        book.setGenres(genres);
+        System.out.println("Genres before saving: " + book.getGenres());
 
         Book savedBook = bookRepository.save(book);
 
@@ -65,24 +68,31 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Page<BookResponseDto> findAll(String genre, String condition, Pageable pageable) {
-        Pageable adjustedPageable = PageRequest.of(
-                pageable.getPageNumber(), SIZE_OF_PAGE, pageable.getSort()
-        );
+    public Page<BookResponseDto> findAll(
+            List<String> genres, String condition,
+            String format, String sort, Pageable pageable
+    ) {
 
         Specification<Book> spec = Specification.where(null);
 
-        if (genre != null) {
+        if (genres != null && !genres.isEmpty()) {
             spec = spec.and((root, query, criteriaBuilder) -> {
-                Join<Book, Genre> genreJoin = root.join("genre");
-                return criteriaBuilder.equal(genreJoin.get("name"), genre);
+                Join<Book, Genre> genreJoin = root.join("genres");
+                return genreJoin.get("name").in(genres);
             });
         }
+
         if (condition != null) {
             spec = spec.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("condition"), condition));
         }
 
+        if (format != null) {
+            spec = spec.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("format"), format));
+        }
+
+        Pageable adjustedPageable = getAdjustedPageable(sort, pageable);
         Page<Book> bookPage = bookRepository.findAll(spec, adjustedPageable);
         return bookPage.map(bookMapper::toDto);
     }
@@ -91,16 +101,16 @@ public class BookServiceImpl implements BookService {
     public UpdateBookResponseDto update(Long id, UpdateBookRequestDto requestDto) {
         logger.info("Received condition: {}", requestDto.getCondition());
 
-        Genre genre = genreRepository.findById(requestDto.getGenreId()).orElseThrow(
-                () -> new EntityNotFoundException("Can't find genre with id: "
-                        + requestDto.getGenreId())
-        );
-
         Book existingBook = bookRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Can't find book with id: " + id)
         );
 
         bookMapper.toUpdateModel(requestDto, existingBook);
+
+        if (requestDto.getGenreIds() != null) {
+            Set<Genre> genres = genreService.findByIds(requestDto.getGenreIds());
+            existingBook.setGenres(genres);
+        }
 
         existingBook.setImage(imageService.updateImage(requestDto.getFile(),
                 existingBook.getImage()));
@@ -121,5 +131,23 @@ public class BookServiceImpl implements BookService {
     @Override
     public void delete(Long id) {
         bookRepository.deleteById(id);
+    }
+
+    private Pageable getAdjustedPageable(String sort, Pageable pageable) {
+        if (sort != null && !sort.isEmpty()) {
+            String[] sortParams = sort.split(":");
+            if (sortParams.length == 2) {
+                String field = sortParams[0];
+                String direction = sortParams[1];
+                Sort.Order order = "desc".equalsIgnoreCase(direction)
+                        ? Sort.Order.desc(field)
+                        : Sort.Order.asc(field);
+                return PageRequest.of(
+                        pageable.getPageNumber(), pageable.getPageSize(), Sort.by(order)
+                );
+            }
+        }
+        return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                Sort.by(DEFAULT_SORT_DIRECTION, DEFAULT_SORT_FIELD));
     }
 }

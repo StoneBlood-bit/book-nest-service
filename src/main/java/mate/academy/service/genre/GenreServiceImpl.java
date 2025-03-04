@@ -1,5 +1,8 @@
 package mate.academy.service.genre;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import mate.academy.dto.genre.GenreDto;
 import mate.academy.exception.EntityNotFoundException;
@@ -10,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,5 +48,11 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public void delete(Long id) {
         genreRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Set<Genre> findByIds(List<Long> ids) {
+        return new HashSet<>(genreRepository.findAllById(ids));
     }
 }

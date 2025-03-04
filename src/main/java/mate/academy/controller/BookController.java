@@ -1,6 +1,7 @@
 package mate.academy.controller;
 
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import mate.academy.dto.book.BookRequestDto;
 import mate.academy.dto.book.BookResponseDto;
@@ -45,12 +46,14 @@ public class BookController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Page<BookResponseDto> findAll(
-            @RequestParam(required = false) String genre,
+            @RequestParam(required = false) List<String> genre,
             @RequestParam(required = false) String condition,
+            @RequestParam(required = false) String format,
+            @RequestParam(required = false) String sort,
             @PageableDefault(size = 10, sort = "releaseYear", direction = Sort.Direction.ASC)
             Pageable pageable
     ) {
-        return bookService.findAll(genre, condition, pageable);
+        return bookService.findAll(genre, condition, format, sort, pageable);
     }
 
     @PutMapping("/{id}")

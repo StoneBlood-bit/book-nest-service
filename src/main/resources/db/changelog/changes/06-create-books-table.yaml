@@ -50,13 +50,8 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: genre_id
-                  type: bigint
-                  constraints:
-                    nullable: false
-        - addForeignKeyConstraint:
-            baseTableName: books
-            baseColumnNames: genre_id
-            referencedTableName: genres
-            referencedColumnNames: id
-            constraintName: fk_genre
+                  name: slug
+                  type: varchar(1000)
+              - column:
+                  name: format
+                  type: varchar(255)

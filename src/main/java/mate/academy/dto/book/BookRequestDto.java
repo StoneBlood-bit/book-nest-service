@@ -1,7 +1,8 @@
 package mate.academy.dto.book;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
+import java.util.List;
 import lombok.Data;
 
 @Data
@@ -15,6 +16,6 @@ public class BookRequestDto {
     @NotBlank
     private String condition;
 
-    @NotNull
-    private Long genreId;
+    @NotEmpty
+    private List<Long> genreIds;
 }
