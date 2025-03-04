@@ -9,6 +9,7 @@ public class BookResponseDto {
     private String title;
     private String author;
     private String condition;
+    private String description;
     private String slug;
     private String format;
     private List<String> genres;
