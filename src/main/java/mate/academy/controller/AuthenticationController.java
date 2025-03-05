@@ -31,6 +31,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthenticationController {
+    public static final String RESPONSE_CONTENT_TYPE = "text/html;charset=UTF-8";
+    public static final String RESPONSE_WRITE_CONTENT = "<script>window.location.href="
+            + "'https://driven-truly-mule.ngrok-free.app/redirect';</script>";
     private final UserService userService;
     private final AuthenticationService authenticationService;
     private final GoogleOAuthService googleOAuthService;
@@ -59,12 +62,10 @@ public class AuthenticationController {
     @GetMapping("/callback/google")
     public void handleGoogleCallback(
             @RequestParam("code") String code,
-            HttpServletResponse response
-    ) throws IOException {
+            HttpServletResponse response) throws IOException {
         String token = googleOAuthService.authenticationWithGoogle(code);
         cookieUtil.addTokenCookie(response, token);
-
-        response.sendRedirect("https://driven-truly-mule.ngrok-free.app/redirect");
+        sendJsRedirect(response);
     }
 
     @Operation(summary = "login user", description = "user authentication from Facebook")
@@ -75,7 +76,11 @@ public class AuthenticationController {
     ) throws IOException {
         String token = facebookOAuthService.authenticationWithFacebook(code);
         cookieUtil.addTokenCookie(response, token);
+        sendJsRedirect(response);
+    }
 
-        response.sendRedirect("https://driven-truly-mule.ngrok-free.app/redirect");
+    private void sendJsRedirect(HttpServletResponse response) throws IOException {
+        response.setContentType(RESPONSE_CONTENT_TYPE);
+        response.getWriter().write(RESPONSE_WRITE_CONTENT);
     }
 }
