@@ -23,8 +23,6 @@ public class CookieUtil {
         cookie.setPath("/");
         cookie.setMaxAge(COOKIE_MAX_AGE);
         cookie.setAttribute(COOKIE_ATTRIBUTE_NAME, COOKIE_ATTRIBUTE_VALUE);
-        response.addHeader("Access-Control-Allow-Origin", "https://driven-truly-mule.ngrok-free.app");
-        response.addHeader("Access-Control-Allow-Credentials", "true");
         response.addCookie(cookie);
     }
 }
