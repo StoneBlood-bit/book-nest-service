@@ -1,7 +1,5 @@
 package mate.academy.config;
 
-import static mate.academy.config.WebConfig.ALLOWED_URL;
-
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +12,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -25,6 +24,8 @@ import org.springframework.web.cors.CorsConfiguration;
 @RequiredArgsConstructor
 @Component
 public class SecurityConfig {
+    public static final String ALLOWED_URL = "https://driven-truly-mule.ngrok-free.app";
+    private final UserDetailsService userDetailsService;
     private final JwtAuthenticationFilter authenticationFilter;
 
     @Bean
@@ -38,10 +39,9 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration corsConfiguration = new CorsConfiguration();
                     corsConfiguration.setAllowedOrigins(Collections.singletonList(ALLOWED_URL));
-                    corsConfiguration.setAllowedMethods(List.of(
-                            "GET", "POST", "PUT",
-                            "DELETE", "OPTIONS"
-                    ));
+                    corsConfiguration.setAllowedMethods(
+                            List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                    );
                     corsConfiguration.setAllowedHeaders(List.of("*"));
                     corsConfiguration.setAllowCredentials(true);
                     return corsConfiguration;
