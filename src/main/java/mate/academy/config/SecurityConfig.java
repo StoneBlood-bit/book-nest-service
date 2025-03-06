@@ -5,7 +5,6 @@ import mate.academy.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -48,8 +47,6 @@ public class SecurityConfig {
                 )
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .httpBasic(Customizer.withDefaults())
-                .userDetailsService(userDetailsService)
                 .build();
     }
 
