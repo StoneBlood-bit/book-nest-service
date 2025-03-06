@@ -61,16 +61,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private String getToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
-            return bearerToken.substring(BEARER_PREFIX.length());
-        }
-
         if (request.getCookies() != null) {
             for (Cookie cookie : request.getCookies()) {
+                System.out.println("COOKIE: " + cookie.getName() + " = " + cookie.getValue());
                 if ("token".equals(cookie.getName())) {
                     return cookie.getValue();
                 }
             }
+        }
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
+            return bearerToken.substring(BEARER_PREFIX.length());
         }
         return null;
     }
