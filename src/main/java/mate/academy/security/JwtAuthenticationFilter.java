@@ -5,7 +5,10 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -64,12 +67,45 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private String getToken(HttpServletRequest request) {
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String headerName = headerNames.nextElement();
+            logger.info("Header: {} = {}", headerName, request.getHeader(headerName));
+        }
+
+        Enumeration<String> parameterNames = request.getParameterNames();
+        while (parameterNames.hasMoreElements()) {
+            String paramName = parameterNames.nextElement();
+            logger.info("Param: {} = {}", paramName, request.getParameter(paramName));
+        }
+
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                logger.info("Cookie: {} = {}", cookie.getName(), cookie.getValue());
+            }
+        }
+
+        logger.info("Request Path: {}", request.getRequestURI());
+        logger.info("Request Method: {}", request.getMethod());
+
+        try {
+            StringBuilder body = new StringBuilder();
+            BufferedReader reader = request.getReader();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                body.append(line);
+            }
+            logger.info("Request Body: {}", body.toString());
+        } catch (IOException e) {
+            logger.error("Error reading request body", e);
+        }
+
         String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (request.getCookies() != null) {
             for (Cookie cookie : request.getCookies()) {
                 logger.info("COOKIE: {} = {}", cookie.getName(), cookie.getValue());
-                System.out.println("COOKIE: " + cookie.getName() + " = " + cookie.getValue());
                 if ("token".equals(cookie.getName())) {
+                    logger.info("returned: {}", cookie.getValue());
                     return cookie.getValue();
                 }
             }
