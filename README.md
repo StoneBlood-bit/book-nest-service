@@ -9,8 +9,7 @@ Request:
 {
     "email": "alice@example.com",
     "password": "password",
-    "firstName": "Alice",
-    "lastName": "Snow"
+    "fullName": "Alice"
 }
 ````
 ````
@@ -18,8 +17,7 @@ Response:
 {
     "id": 5,
     "email": "alice@example.com",
-    "firstName": "Alice",
-    "lastName": "Snow"
+    "fullName": "Alice"
 }
 ````
 - **login** POST ``/auth/login``
