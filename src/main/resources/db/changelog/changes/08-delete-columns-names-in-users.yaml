@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: delete-columns-names-in-users
+      author: developer
+      changes:
+        - dropColumn:
+            tableName: users
+            columnName: first_name
+        - dropColumn:
+            tableName: users
+            columnName: last_name

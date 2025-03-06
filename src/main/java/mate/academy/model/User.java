@@ -35,11 +35,8 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false, name = "first_name")
-    private String firstName;
-
-    @Column(nullable = false, name = "last_name")
-    private String lastName;
+    @Column(nullable = false, name = "full_name")
+    private String fullName;
 
     @Column(nullable = false)
     private int tokens;
