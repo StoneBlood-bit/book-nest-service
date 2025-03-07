@@ -3,3 +3,7 @@ databaseChangeLog:
       file: db/changelog/changes/06-create-books-table.yaml
   - include:
       file: db/changelog/changes/7-create-books-genres-table.yaml
+  - include:
+      file: db/changelog/changes/08-delete-columns-names-in-users.yaml
+  - include:
+      file: db/changelog/changes/09-add-column-full-name-into-users.yaml

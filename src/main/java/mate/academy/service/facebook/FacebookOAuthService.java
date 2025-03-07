@@ -80,8 +80,7 @@ public class FacebookOAuthService {
         User user = userRepository.findByEmail(email).orElseGet(() -> {
             User newUser = new User();
             newUser.setEmail(email);
-            newUser.setFirstName(name);
-            newUser.setLastName("");
+            newUser.setFullName(name);
             newUser.setPassword("");
             newUser.setTokens(0);
             newUser.setRole(User.Role.CUSTOMER);
