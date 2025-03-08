@@ -18,4 +18,5 @@ public class BookRequestDto {
 
     @NotEmpty
     private List<Long> genreIds;
+
 }

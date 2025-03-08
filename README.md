@@ -255,3 +255,49 @@ Response:
 ````
 The response contains an image in png format
 ````
+### Favorites
+- **add a book to favorites** POST ``/favorites``
+````
+Request:
+{
+    "bookId": 9
+}
+````
+``The response contains 200 Status OK``
+- **remove a book from favorites** DELETE ``/favorites/{bookId}`` 
+````
+The response contains 200 Status OK
+````
+- **get all books from favorites** GET ``/favorites``
+````
+Response:
+[
+    {
+        "id": 10,
+        "title": "updated title",
+        "author": "updated author2",
+        "condition": "Like New",
+        "description": "Updated description",
+        "slug": "updated-author2-updated-title-10",
+        "format": "Hardcover",
+        "genres": [
+            "demo genre",
+            "demo genre2"
+        ],
+        "releaseYear": 2015
+    },
+    {
+        "id": 11,
+        "title": "The Best Of Me",
+        "author": "Nicholas SparKs",
+        "condition": "Like New",
+        "description": null,
+        "slug": "nicholas-sparks-the-best-of-me-11",
+        "format": null,
+        "genres": [
+            "Novella",
+            "Fictions"
+        ],
+        "releaseYear": 0
+    }
+]

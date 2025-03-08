@@ -13,7 +13,9 @@ import mate.academy.exception.EntityNotFoundException;
 import mate.academy.mapper.BookMapper;
 import mate.academy.model.Book;
 import mate.academy.model.Genre;
+import mate.academy.model.User;
 import mate.academy.repository.book.BookRepository;
+import mate.academy.repository.user.UserRepository;
 import mate.academy.security.AuthenticationService;
 import mate.academy.service.genre.GenreService;
 import mate.academy.service.image.ImageService;
@@ -37,16 +39,20 @@ public class BookServiceImpl implements BookService {
     private final BookMapper bookMapper;
     private final ImageService imageService;
     private final SlugGenerator slugGenerator;
+    private final UserRepository userRepository;
 
     @Override
-    public BookResponseDto save(BookRequestDto requestDto) {
+    public BookResponseDto save(BookRequestDto requestDto, Long userId) {
 
         Book book = bookMapper.toModel(requestDto);
 
         Set<Genre> genres = genreService.findByIds(requestDto.getGenreIds());
         book.setGenres(genres);
-        System.out.println("Genres before saving: " + book.getGenres());
 
+        User donor = userRepository.findById(userId).orElseThrow(
+                () -> new EntityNotFoundException("Can't find user with id: " + userId)
+        );
+        book.setDonor(donor);
         Book savedBook = bookRepository.save(book);
 
         savedBook.setSlug(slugGenerator.generateSlug(

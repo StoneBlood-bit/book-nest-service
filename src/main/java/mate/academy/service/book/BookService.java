@@ -9,7 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface BookService {
-    BookResponseDto save(BookRequestDto requestDto);
+    BookResponseDto save(BookRequestDto requestDto, Long userId);
 
     BookResponseDto getById(Long id);
 

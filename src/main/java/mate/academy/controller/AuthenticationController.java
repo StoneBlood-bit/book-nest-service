@@ -46,7 +46,9 @@ public class AuthenticationController {
             @RequestBody @Valid UserLoginRequestDto requestDto,
             HttpServletResponse response
     ) throws IOException {
-        return authenticationService.authenticate(requestDto, response);
+        UserLoginResponseDto authenticate =
+                authenticationService.authenticate(requestDto, response);
+        return authenticate;
     }
 
     @Operation(summary = "registration user", description = "registration a new user")

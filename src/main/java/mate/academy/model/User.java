@@ -7,7 +7,12 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import lombok.Getter;
@@ -47,6 +52,20 @@ public class User implements UserDetails {
 
     @Column(nullable = false, name = "is_deleted")
     private boolean isDeleted = false;
+
+    @OneToMany(mappedBy = "donor")
+    private List<Book> donatedBooks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "receiver")
+    private List<Book> receivedBooks = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_favorite_books",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id")
+    )
+    private List<Book> favoriteBooks = new ArrayList<>();
 
     public boolean isAdmin() {
         return Role.MANAGER.equals(this.role);

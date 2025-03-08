@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-donor-receiver-to-books
+      author: developer
+      changes:
+        - addColumn:
+            tableName: books
+            columns:
+              - column:
+                  name: donor_id
+                  type: bigint
+              - column:
+                  name: receiver_id
+                  type: bigint
+        - addForeignKeyConstraint:
+            baseTableName: books
+            baseColumnNames: donor_id
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+            constraintName: fk_books_donor
+        - addForeignKeyConstraint:
+            baseTableName: books
+            baseColumnNames: receiver_id
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+            constraintName: fk_books_receiver
