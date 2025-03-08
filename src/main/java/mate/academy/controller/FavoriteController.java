@@ -1,0 +1,41 @@
+package mate.academy.controller;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import mate.academy.dto.book.AddToFavoriteRequestDto;
+import mate.academy.model.User;
+import mate.academy.service.favorite.FavoriteService;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+@RequiredArgsConstructor
+@RestController
+@RequestMapping("/favorites")
+public class FavoriteController {
+    private final FavoriteService favoriteService;
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.OK)
+    public void addBookToFavorite(
+            @RequestBody @Valid AddToFavoriteRequestDto requestDto,
+            @AuthenticationPrincipal User user
+    ) {
+        favoriteService.addBookToFavorite(requestDto, user.getId());
+    }
+
+    @DeleteMapping("/{bookId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void removeBookFromFavorite(
+            @PathVariable Long bookId,
+            @AuthenticationPrincipal User user
+    ) {
+        favoriteService.removeBookFromFavorite(bookId, user.getId());
+    }
+}

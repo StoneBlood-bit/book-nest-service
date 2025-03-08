@@ -137,31 +137,6 @@ public class BookServiceImpl implements BookService {
         bookRepository.deleteById(id);
     }
 
-    @Override
-    public void addBookToFavorite(AddToFavoriteRequestDto favoriteRequestDto, Long userId) {
-        Book book = bookRepository.findById(favoriteRequestDto.getBookId()).orElseThrow(
-                () -> new EntityNotFoundException(
-                        "Can't find book with id: " + favoriteRequestDto.getBookId()
-                )
-        );
-
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new EntityNotFoundException("Can't find user with id: " + userId)
-        );
-
-        boolean isBookInFavorites = user.getFavoriteBooks().stream()
-                .anyMatch(favoriteBook -> favoriteBook.getId().equals(book.getId()));
-
-        if (isBookInFavorites) {
-            throw new BookAlreadyInFavoritesException(
-                    "The book is already on your favorite list"
-            );
-        }
-
-        user.getFavoriteBooks().add(book);
-        userRepository.save(user);
-    }
-
     private Pageable getAdjustedPageable(String sort, Pageable pageable) {
         if (sort != null && !sort.isEmpty()) {
             String[] sortParams = sort.split(":");

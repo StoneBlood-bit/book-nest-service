@@ -19,6 +19,4 @@ public interface BookService {
     UpdateBookResponseDto update(Long id, UpdateBookRequestDto requestDto);
 
     void delete(Long id);
-
-    void addBookToFavorite(AddToFavoriteRequestDto favoriteRequestDto, Long userId);
 }
