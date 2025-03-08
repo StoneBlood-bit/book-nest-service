@@ -91,4 +91,16 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         body.put("message", ex.getMessage());
         return new ResponseEntity<>(body, HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(BookNotInFavoritesException.class)
+    public ResponseEntity<Object> handleBookNotInFavoritesException(
+            AuthenticationException ex, WebRequest request
+    ) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.CONFLICT);
+        body.put("error", "BookNotInFavoritesException error");
+        body.put("message", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.CONFLICT);
+    }
 }
