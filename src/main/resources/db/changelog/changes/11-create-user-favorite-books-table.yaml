@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-user-favorite-books-table
+      author: developer
+      changes:
+        - createTable:
+            tableName: user_favorite_books
+            columns:
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: user_favorite_books
+            columnNames: user_id, book_id
+        - addForeignKeyConstraint:
+            baseTableName: user_favorite_books
+            baseColumnNames: user_id
+            constraintName: fk_user_favorite_books_user
+            referencedTableName: user
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseTableName: user_favorite_books
+            baseColumnNames: book_id
+            constraintName: fk_user_favorite_books_book
+            referencedTableName: books
+            referencedColumnNames: id
