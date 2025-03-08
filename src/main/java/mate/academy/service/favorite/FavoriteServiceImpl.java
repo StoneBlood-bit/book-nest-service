@@ -1,23 +1,26 @@
 package mate.academy.service.favorite;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import mate.academy.dto.book.AddToFavoriteRequestDto;
+import mate.academy.dto.book.BookResponseDto;
 import mate.academy.exception.BookAlreadyInFavoritesException;
 import mate.academy.exception.BookNotInFavoritesException;
 import mate.academy.exception.EntityNotFoundException;
+import mate.academy.mapper.BookMapper;
 import mate.academy.model.Book;
 import mate.academy.model.User;
 import mate.academy.repository.book.BookRepository;
 import mate.academy.repository.user.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class FavoriteServiceImpl implements FavoriteService {
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
+    private final BookMapper bookMapper;
 
     @Override
     public void addBookToFavorite(AddToFavoriteRequestDto favoriteRequestDto, Long userId) {
@@ -66,5 +69,18 @@ public class FavoriteServiceImpl implements FavoriteService {
         favoriteBooks.removeIf(favoriteBook -> favoriteBook.getId().equals(book.getId()));
 
         userRepository.save(user);
+    }
+
+    @Override
+    public List<BookResponseDto> getAllBooksFromFavorite(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new EntityNotFoundException("Can't find user by id: " + userId)
+        );
+
+        List<Book> favoriteBooks = user.getFavoriteBooks();
+
+        return favoriteBooks.stream()
+                .map(bookMapper::toDto)
+                .collect(Collectors.toList());
     }
 }
