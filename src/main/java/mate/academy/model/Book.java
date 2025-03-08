@@ -1,15 +1,7 @@
 package mate.academy.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
@@ -58,4 +50,12 @@ public class Book {
 
     @Column(nullable = false, name = "is_deleted")
     private boolean isDeleted = false;
+
+    @ManyToOne
+    @JoinColumn(name = "donor_id")
+    private User donor;
+
+    @ManyToOne
+    @JoinColumn(name = "receiver_id")
+    private User receiver;
 }
