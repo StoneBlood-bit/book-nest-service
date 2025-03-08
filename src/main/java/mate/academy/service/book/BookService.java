@@ -1,15 +1,13 @@
 package mate.academy.service.book;
 
 import java.util.List;
-import mate.academy.dto.book.BookRequestDto;
-import mate.academy.dto.book.BookResponseDto;
-import mate.academy.dto.book.UpdateBookRequestDto;
-import mate.academy.dto.book.UpdateBookResponseDto;
+
+import mate.academy.dto.book.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface BookService {
-    BookResponseDto save(BookRequestDto requestDto);
+    BookResponseDto save(BookRequestDto requestDto, Long userId);
 
     BookResponseDto getById(Long id);
 
@@ -21,4 +19,6 @@ public interface BookService {
     UpdateBookResponseDto update(Long id, UpdateBookRequestDto requestDto);
 
     void delete(Long id);
+
+    void addBookToFavorite(AddToFavoriteRequestDto favoriteRequestDto, Long userId);
 }

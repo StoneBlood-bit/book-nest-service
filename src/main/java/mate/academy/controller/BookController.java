@@ -7,12 +7,14 @@ import mate.academy.dto.book.BookRequestDto;
 import mate.academy.dto.book.BookResponseDto;
 import mate.academy.dto.book.UpdateBookRequestDto;
 import mate.academy.dto.book.UpdateBookResponseDto;
+import mate.academy.model.User;
 import mate.academy.service.book.BookService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -33,8 +35,10 @@ public class BookController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BookResponseDto create(@RequestBody @Valid BookRequestDto requestDto) {
-        return bookService.save(requestDto);
+    public BookResponseDto create(
+            @RequestBody @Valid BookRequestDto requestDto,
+            @AuthenticationPrincipal User user) {
+        return bookService.save(requestDto, user.getId());
     }
 
     @GetMapping("/{id}")

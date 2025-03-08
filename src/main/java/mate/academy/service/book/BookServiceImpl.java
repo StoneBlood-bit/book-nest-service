@@ -5,15 +5,15 @@ import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import mate.academy.component.SlugGenerator;
-import mate.academy.dto.book.BookRequestDto;
-import mate.academy.dto.book.BookResponseDto;
-import mate.academy.dto.book.UpdateBookRequestDto;
-import mate.academy.dto.book.UpdateBookResponseDto;
+import mate.academy.dto.book.*;
+import mate.academy.exception.BookAlreadyInFavoritesException;
 import mate.academy.exception.EntityNotFoundException;
 import mate.academy.mapper.BookMapper;
 import mate.academy.model.Book;
 import mate.academy.model.Genre;
+import mate.academy.model.User;
 import mate.academy.repository.book.BookRepository;
+import mate.academy.repository.user.UserRepository;
 import mate.academy.security.AuthenticationService;
 import mate.academy.service.genre.GenreService;
 import mate.academy.service.image.ImageService;
@@ -37,16 +37,20 @@ public class BookServiceImpl implements BookService {
     private final BookMapper bookMapper;
     private final ImageService imageService;
     private final SlugGenerator slugGenerator;
+    private final UserRepository userRepository;
 
     @Override
-    public BookResponseDto save(BookRequestDto requestDto) {
+    public BookResponseDto save(BookRequestDto requestDto, Long userId) {
 
         Book book = bookMapper.toModel(requestDto);
 
         Set<Genre> genres = genreService.findByIds(requestDto.getGenreIds());
         book.setGenres(genres);
-        System.out.println("Genres before saving: " + book.getGenres());
 
+        User donor = userRepository.findById(userId).orElseThrow(
+                () -> new EntityNotFoundException("Can't find user with id: " + userId)
+        );
+        book.setDonor(donor);
         Book savedBook = bookRepository.save(book);
 
         savedBook.setSlug(slugGenerator.generateSlug(
@@ -131,6 +135,31 @@ public class BookServiceImpl implements BookService {
     @Override
     public void delete(Long id) {
         bookRepository.deleteById(id);
+    }
+
+    @Override
+    public void addBookToFavorite(AddToFavoriteRequestDto favoriteRequestDto, Long userId) {
+        Book book = bookRepository.findById(favoriteRequestDto.getBookId()).orElseThrow(
+                () -> new EntityNotFoundException(
+                        "Can't find book with id: " + favoriteRequestDto.getBookId()
+                )
+        );
+
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new EntityNotFoundException("Can't find user with id: " + userId)
+        );
+
+        boolean isBookInFavorites = user.getFavoriteBooks().stream()
+                .anyMatch(favoriteBook -> favoriteBook.getId().equals(book.getId()));
+
+        if (isBookInFavorites) {
+            throw new BookAlreadyInFavoritesException(
+                    "The book is already on your favorite list"
+            );
+        }
+
+        user.getFavoriteBooks().add(book);
+        userRepository.save(user);
     }
 
     private Pageable getAdjustedPageable(String sort, Pageable pageable) {
