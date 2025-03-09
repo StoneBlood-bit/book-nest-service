@@ -21,4 +21,6 @@ public interface BookService {
     UpdateBookResponseDto update(Long id, UpdateBookRequestDto requestDto);
 
     void delete(Long id);
+
+    List<String> findAllBookTitles();
 }

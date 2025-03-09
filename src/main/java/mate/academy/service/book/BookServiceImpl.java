@@ -139,6 +139,11 @@ public class BookServiceImpl implements BookService {
         bookRepository.deleteById(id);
     }
 
+    @Override
+    public List<String> findAllBookTitles() {
+        return bookRepository.findAllBookTitles();
+    }
+
     private Pageable getAdjustedPageable(String sort, Pageable pageable) {
         if (sort != null && !sort.isEmpty()) {
             String[] sortParams = sort.split(":");
