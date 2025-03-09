@@ -301,3 +301,45 @@ Response:
         "releaseYear": 0
     }
 ]
+````
+### Donated
+- **get all donated books** GET ``/donated``
+````
+Response:
+[
+    {
+        "id": 15,
+        "title": "The Best Of Me",
+        "author": "Nicholas SparKs",
+        "condition": "Like New",
+        "description": null,
+        "slug": "nicholas-sparks-the-best-of-me-15",
+        "format": null,
+        "genres": [
+            "Fictions",
+            "Novella"
+        ],
+        "releaseYear": 0
+    },
+    {
+        "id": 16,
+        "title": "To test about donor",
+        "author": "Nicholas SparKs",
+        "condition": "Like New",
+        "description": null,
+        "slug": "nicholas-sparks-to-test-about-donor-16",
+        "format": null,
+        "genres": [
+            "Fictions",
+            "Novella"
+        ],
+        "releaseYear": 0
+    }
+]
+````
+### Received
+- **get all received books** GET ``/received``
+````
+Response:
+[]
+````
