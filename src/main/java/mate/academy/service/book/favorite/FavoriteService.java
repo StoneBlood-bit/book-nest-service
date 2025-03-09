@@ -1,4 +1,4 @@
-package mate.academy.service.favorite;
+package mate.academy.service.book.favorite;
 
 import java.util.List;
 import mate.academy.dto.book.AddToFavoriteRequestDto;

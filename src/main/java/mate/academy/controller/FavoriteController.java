@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import mate.academy.dto.book.AddToFavoriteRequestDto;
 import mate.academy.dto.book.BookResponseDto;
 import mate.academy.model.User;
-import mate.academy.service.favorite.FavoriteService;
+import mate.academy.service.book.favorite.FavoriteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
