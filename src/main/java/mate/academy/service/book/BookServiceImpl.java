@@ -54,6 +54,7 @@ public class BookServiceImpl implements BookService {
         User donor = userRepository.findById(userId).orElseThrow(
                 () -> new EntityNotFoundException("Can't find user with id: " + userId)
         );
+        donor.setTokens(donor.getTokens() + 1);
         book.setDonor(donor);
         Book savedBook = bookRepository.save(book);
 
@@ -62,7 +63,6 @@ public class BookServiceImpl implements BookService {
                 savedBook.getTitle(),
                 savedBook.getId()
         ));
-        System.out.println(savedBook.getSlug());
 
         return bookMapper.toDto(bookRepository.save(savedBook));
     }
