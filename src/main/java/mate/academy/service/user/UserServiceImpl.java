@@ -43,6 +43,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(user);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public UserInfoResponseDto getById(Long id) {
         User user = userRepository.findById(id).orElseThrow(

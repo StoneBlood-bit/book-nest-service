@@ -14,6 +14,7 @@ import mate.academy.model.User;
 import mate.academy.repository.book.BookRepository;
 import mate.academy.repository.user.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +48,7 @@ public class FavoriteServiceImpl implements FavoriteService {
         userRepository.save(user);
     }
 
+    @Transactional
     @Override
     public void removeBookFromFavorite(Long bookId, Long userId) {
         Book book = bookRepository.findById(bookId).orElseThrow(

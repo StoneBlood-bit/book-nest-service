@@ -22,12 +22,14 @@ public class GenreServiceImpl implements GenreService {
     private final GenreRepository genreRepository;
     private final GenreMapper genreMapper;
 
+    @Transactional
     @Override
     public GenreDto save(GenreDto genreDto) {
         Genre genre = genreMapper.toModel(genreDto);
         return genreMapper.toDto(genreRepository.save(genre));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public GenreDto getById(Long id) {
         Genre genre = genreRepository.findById(id).orElseThrow(
@@ -36,6 +38,7 @@ public class GenreServiceImpl implements GenreService {
         return genreMapper.toDto(genre);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Page<GenreDto> findAll(Pageable pageable) {
         Pageable adjustedPageable = PageRequest.of(
@@ -45,6 +48,7 @@ public class GenreServiceImpl implements GenreService {
         return genresPage.map(genreMapper::toDto);
     }
 
+    @Transactional
     @Override
     public void delete(Long id) {
         genreRepository.deleteById(id);
