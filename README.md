@@ -343,3 +343,14 @@ Response:
 Response:
 []
 ````
+### Titles
+- **Get all book titles** GET ``/books/titles``
+````
+Response:
+[
+    "The Best Of Me",
+    "The Best Of Me1",
+    "The Best Of Me2",
+    "The Best Of Me3"
+]
+````
