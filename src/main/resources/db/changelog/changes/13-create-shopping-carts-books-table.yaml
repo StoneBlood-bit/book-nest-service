@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-shopping-carts-books-table
+      author: developer
+      changes:
+        - createTable:
+            tableName: shopping_carts_books
+            columns:
+              - column:
+                  name: shopping_cart_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: shopping_carts_books
+            columnNames: shopping_cart_id, book_id
+        - addForeignKeyConstraint:
+            baseTableName: shopping_carts_books
+            baseColumnNames: shopping_cart_id
+            constraintName: fk_shopping_cart_books_shopping_cart
+            referencedTableName: shopping_carts
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseTableName: shopping_carts_books
+            baseColumnNames: book_id
+            constraintName: shopping_carts_books_book
+            referencedTableName: books
+            referencedColumnNames: id

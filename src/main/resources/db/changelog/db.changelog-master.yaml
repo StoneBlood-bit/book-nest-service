@@ -7,3 +7,7 @@ databaseChangeLog:
       file: db/changelog/changes/08-delete-columns-names-in-users.yaml
   - include:
       file: db/changelog/changes/09-add-column-full-name-into-users.yaml
+  - include:
+      file: db/changelog/changes/12-create-shopping-carts-table.yaml
+  - include:
+      file: db/changelog/changes/13-create-shopping-carts-books-table.yaml
