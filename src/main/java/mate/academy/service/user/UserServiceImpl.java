@@ -7,6 +7,7 @@ import mate.academy.dto.user.UserRegistrationResponseDto;
 import mate.academy.exception.EntityNotFoundException;
 import mate.academy.exception.RegistrationException;
 import mate.academy.mapper.UserMapper;
+import mate.academy.model.ShoppingCart;
 import mate.academy.model.User;
 import mate.academy.repository.user.UserRepository;
 import mate.academy.security.AuthenticationService;
@@ -40,8 +41,11 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.toModel(requestDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(User.Role.CUSTOMER);
-        shoppingCartService.createShoppingCart(user);
+
         userRepository.save(user);
+        logger.info("User ID: {}", user.getId());
+
+        ShoppingCart shoppingCart = shoppingCartService.createShoppingCart(user);
         return userMapper.toDto(user);
     }
 

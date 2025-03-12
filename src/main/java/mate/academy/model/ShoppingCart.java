@@ -8,7 +8,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.List;
@@ -16,6 +15,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+
 @Entity
 @Table(name = "shopping_carts")
 @Getter
@@ -29,7 +29,6 @@ public class ShoppingCart {
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @MapsId
     private User user;
 
     @ManyToMany

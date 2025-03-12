@@ -7,6 +7,7 @@ import mate.academy.mapper.ShoppingCartMapper;
 import mate.academy.model.Book;
 import mate.academy.model.ShoppingCart;
 import mate.academy.model.User;
+import mate.academy.repository.book.BookRepository;
 import mate.academy.repository.shoppingcart.ShoppingCartRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final ShoppingCartRepository shoppingCartRepository;
     private final ShoppingCartMapper shoppingCartMapper;
+    private final BookRepository bookRepository;
 
     @Override
     public ShoppingCartResponseDto getByUserId(Long userId) {
@@ -34,16 +36,25 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return shoppingCartRepository.save(shoppingCart);
     }
 
+    @Transactional
     @Override
-    public void addBookToShoppingCart(Book book, Long userId) {
+    public void addBookToShoppingCart(Long bookId, Long userId) {
+        System.out.println("I`m here");
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId).orElseThrow(
                 () -> new EntityNotFoundException(
                         "Can't find shopping cart for user with id: " + userId)
         );
+        System.out.println("Cart: " + shoppingCart.getId());
+
+        Book book = bookRepository.findById(bookId).orElseThrow(
+                () -> new EntityNotFoundException("Can't find book with id: " + bookId)
+        );
+        System.out.println("Book: " + book.getId());
 
         if (!shoppingCart.getBooks().contains(book)) {
+            System.out.println("Books before " + shoppingCart.getBooks());
             shoppingCart.getBooks().add(book);
-            shoppingCartRepository.save(shoppingCart);
+            System.out.println("Books after" + shoppingCart.getBooks());
         }
     }
 }
