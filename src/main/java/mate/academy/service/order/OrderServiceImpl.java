@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
 import mate.academy.dto.order.OrderResponseDto;
 import mate.academy.exception.EntityNotFoundException;
+import mate.academy.exception.InsufficientTokensException;
 import mate.academy.mapper.OrderMapper;
 import mate.academy.model.Order;
 import mate.academy.model.ShoppingCart;
@@ -34,6 +35,12 @@ public class OrderServiceImpl implements OrderService {
             throw new RuntimeException("Shopping cart is empty!");
         }
 
+        if (!isTokensEnough(user, shoppingCart)) {
+            throw new InsufficientTokensException(
+                    "User with id " + user.getId() + " doesn't have enough tokens"
+            );
+        }
+
         Order order = new Order();
         order.setUser(user);
         order.setBooks(new ArrayList<>(shoppingCart.getBooks()));
@@ -44,5 +51,11 @@ public class OrderServiceImpl implements OrderService {
         shoppingCartRepository.save(shoppingCart);
 
         return orderMapper.toDto(orderRepository.save(order));
+    }
+
+    private boolean isTokensEnough(User user, ShoppingCart shoppingCart) {
+        int price = shoppingCart.getBooks().size();
+
+        return user.getTokens() >= price;
     }
 }
