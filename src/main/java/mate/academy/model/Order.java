@@ -42,9 +42,9 @@ public class Order {
     )
     private List<Book> books;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "status")
     @Enumerated(EnumType.STRING)
-    private OrderStatus orderStatus;
+    private OrderStatus orderStatus = OrderStatus.NEW;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
