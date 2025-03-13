@@ -82,7 +82,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 
     @ExceptionHandler(BookAlreadyInFavoritesException.class)
     public ResponseEntity<Object> handleBookAlreadyInFavoritesException(
-            AuthenticationException ex, WebRequest request
+            BookAlreadyInFavoritesException ex, WebRequest request
     ) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
@@ -94,7 +94,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 
     @ExceptionHandler(BookNotInFavoritesException.class)
     public ResponseEntity<Object> handleBookNotInFavoritesException(
-            AuthenticationException ex, WebRequest request
+            BookNotInFavoritesException ex, WebRequest request
     ) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
@@ -106,25 +106,34 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 
     @ExceptionHandler(InsufficientTokensException.class)
     public ResponseEntity<Object> handleInsufficientTokensException(
-            AuthenticationException ex, WebRequest request
+            InsufficientTokensException ex, WebRequest request
     ) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.CONFLICT);
+        body.put("status", HttpStatus.PAYMENT_REQUIRED);
         body.put("error", "InsufficientTokensException error");
         body.put("message", ex.getMessage());
-        return new ResponseEntity<>(body, HttpStatus.CONFLICT);
+        return new ResponseEntity<>(body, HttpStatus.PAYMENT_REQUIRED);
     }
 
     @ExceptionHandler(BookNotInShoppingCartException.class)
     public ResponseEntity<Object> handleBookNotInShoppingCartException(
-            AuthenticationException ex, WebRequest request
+            BookNotInShoppingCartException ex, WebRequest request
     ) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.CONFLICT);
+        body.put("status", HttpStatus.BAD_REQUEST);
         body.put("error", "BookNotInShoppingCartException error");
         body.put("message", ex.getMessage());
-        return new ResponseEntity<>(body, HttpStatus.CONFLICT);
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    private ResponseEntity<Object> buildErrorResponse(HttpStatus status, String error, String message) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", status.value());
+        body.put("error", error);
+        body.put("message", message);
+        return new ResponseEntity<>(body, status);
     }
 }
