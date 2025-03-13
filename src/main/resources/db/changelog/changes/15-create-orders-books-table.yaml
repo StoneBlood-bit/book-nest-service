@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-orders-books-table
+      author: developer
+      changes:
+        - createTable:
+            tableName: orders_books
+            columns:
+              - column:
+                  name: order_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: orders_books
+            columnNames: order_id, book_id
+            constraintName: pk_orders_books
+        - addForeignKeyConstraint:
+            baseTableName: orders_books
+            baseColumnNames: order_id
+            constraintName: fk_orders_books_order
+            referencedTableName: orders
+            referencedColumnNames: id
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: orders_books
+            baseColumnNames: book_id
+            constraintName: fk_orders_books_book
+            referencedTableName: books
+            referencedColumnNames: id
+            onDelete: CASCADE

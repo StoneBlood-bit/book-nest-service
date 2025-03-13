@@ -27,6 +27,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +42,7 @@ public class BookServiceImpl implements BookService {
     private final SlugGenerator slugGenerator;
     private final UserRepository userRepository;
 
+    @Transactional
     @Override
     public BookResponseDto save(BookRequestDto requestDto, Long userId) {
 
@@ -52,6 +54,7 @@ public class BookServiceImpl implements BookService {
         User donor = userRepository.findById(userId).orElseThrow(
                 () -> new EntityNotFoundException("Can't find user with id: " + userId)
         );
+        donor.setTokens(donor.getTokens() + 1);
         book.setDonor(donor);
         Book savedBook = bookRepository.save(book);
 
@@ -60,11 +63,11 @@ public class BookServiceImpl implements BookService {
                 savedBook.getTitle(),
                 savedBook.getId()
         ));
-        System.out.println(savedBook.getSlug());
 
         return bookMapper.toDto(bookRepository.save(savedBook));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public BookResponseDto getById(Long id) {
         Book book = bookRepository.findById(id).orElseThrow(
@@ -73,6 +76,7 @@ public class BookServiceImpl implements BookService {
         return bookMapper.toDto(book);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Page<BookResponseDto> findAll(
             List<String> genres, String condition,
@@ -103,6 +107,7 @@ public class BookServiceImpl implements BookService {
         return bookPage.map(bookMapper::toDto);
     }
 
+    @Transactional
     @Override
     public UpdateBookResponseDto update(Long id, UpdateBookRequestDto requestDto) {
         logger.info("Received condition: {}", requestDto.getCondition());
@@ -134,11 +139,13 @@ public class BookServiceImpl implements BookService {
         return bookMapper.toUpdateDto(bookRepository.save(existingBook));
     }
 
+    @Transactional
     @Override
     public void delete(Long id) {
         bookRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<String> findAllBookTitles() {
         return bookRepository.findAllBookTitles();
