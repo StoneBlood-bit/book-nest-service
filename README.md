@@ -354,3 +354,46 @@ Response:
     "The Best Of Me3"
 ]
 ````
+### Shopping Cart
+- **get shopping cart** GET ``/shopping-carts``
+````
+Response:
+{
+    "id": 6,
+    "userId": 12,
+    "books": [
+        {
+            "id": 15,
+            "title": "The Best Of Me",
+            "author": "Nicholas SparKs",
+            "condition": "Like New",
+            "description": null,
+            "slug": "nicholas-sparks-the-best-of-me-15",
+            "format": null,
+            "genres": [
+                "Novella",
+                "Fictions"
+            ],
+            "releaseYear": 0
+        }
+    ]
+}
+````
+- **add book to shopping cart** POST ``/shopping-carts/books/{bookId}`` \
+``Response: 200 OK (Status)``
+- **remove book from shopping cart** DELETE ``/shopping-carts/books/remove/{bookId}`` \
+  ``Response: 200 OK (Status)``
+### Order
+- **create order** POST ``/orders``
+````
+Response:
+{
+    "id": 1,
+    "userEmail": "will@example.com",
+    "bookTitles": [
+        "The Best Of Me"
+    ],
+    "orderStatus": "NEW",
+    "createdAt": "2025-03-13T19:13:07.4736746"
+}
+````

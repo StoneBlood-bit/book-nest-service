@@ -2,6 +2,7 @@ package mate.academy.service.shoppingcart;
 
 import lombok.RequiredArgsConstructor;
 import mate.academy.dto.shoppingcart.ShoppingCartResponseDto;
+import mate.academy.exception.BookNotInShoppingCartException;
 import mate.academy.exception.EntityNotFoundException;
 import mate.academy.mapper.ShoppingCartMapper;
 import mate.academy.model.Book;
@@ -39,22 +40,36 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Transactional
     @Override
     public void addBookToShoppingCart(Long bookId, Long userId) {
-        System.out.println("I`m here");
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId).orElseThrow(
                 () -> new EntityNotFoundException(
                         "Can't find shopping cart for user with id: " + userId)
         );
-        System.out.println("Cart: " + shoppingCart.getId());
 
         Book book = bookRepository.findById(bookId).orElseThrow(
                 () -> new EntityNotFoundException("Can't find book with id: " + bookId)
         );
-        System.out.println("Book: " + book.getId());
 
         if (!shoppingCart.getBooks().contains(book)) {
-            System.out.println("Books before " + shoppingCart.getBooks());
             shoppingCart.getBooks().add(book);
-            System.out.println("Books after" + shoppingCart.getBooks());
+        }
+    }
+
+    @Transactional
+    @Override
+    public void removeBookFromShoppingCart(Long bookId, Long userId) {
+        ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId).orElseThrow(
+                () -> new EntityNotFoundException(
+                        "Can't find shopping cart for user with id: " + userId)
+        );
+
+        Book book = bookRepository.findById(bookId).orElseThrow(
+                () -> new EntityNotFoundException("Can't find book with id: " + bookId)
+        );
+
+        if (shoppingCart.getBooks().contains(book)) {
+            shoppingCart.getBooks().remove(book);
+        } else {
+            throw new BookNotInShoppingCartException("Book not found in the shopping cart");
         }
     }
 }

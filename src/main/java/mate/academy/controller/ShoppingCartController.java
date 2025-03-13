@@ -7,6 +7,7 @@ import mate.academy.service.shoppingcart.ShoppingCartService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,5 +35,15 @@ public class ShoppingCartController {
                                       @AuthenticationPrincipal User user
     ) {
         shoppingCartService.addBookToShoppingCart(bookId, user.getId());
+    }
+
+    @PreAuthorize("hasRole('CUSTOMER')")
+    @DeleteMapping("/books/remove/{bookId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void removeBookFromShoppingCart(
+            @PathVariable Long bookId,
+            @AuthenticationPrincipal User user
+    ) {
+        shoppingCartService.removeBookFromShoppingCart(bookId, user.getId());
     }
 }

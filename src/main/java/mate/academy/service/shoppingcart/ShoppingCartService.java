@@ -10,4 +10,6 @@ public interface ShoppingCartService {
     ShoppingCart createShoppingCart(User user);
 
     void addBookToShoppingCart(Long bookId, Long userId);
+
+    void removeBookFromShoppingCart(Long bookId, Long userId);
 }
