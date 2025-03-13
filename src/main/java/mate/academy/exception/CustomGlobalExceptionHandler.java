@@ -47,88 +47,56 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> handleEntityNotFound(
-            EntityNotFoundException ex, WebRequest request
-    ) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.NOT_FOUND);
-        body.put("error", ex.getMessage());
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+            EntityNotFoundException ex, WebRequest request) {
+        return buildErrorResponse(HttpStatus.NOT_FOUND,
+                "Entity Not Found", ex.getMessage());
     }
 
     @ExceptionHandler(RegistrationException.class)
     public ResponseEntity<Object> handleRegistrationException(
-            RegistrationException ex, WebRequest request
-    ) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.CONFLICT);
-        body.put("error", "Registration error");
-        body.put("message", ex.getMessage());
-        return new ResponseEntity<>(body, HttpStatus.CONFLICT);
+            RegistrationException ex, WebRequest request) {
+        return buildErrorResponse(HttpStatus.CONFLICT,
+                "Registration Error", ex.getMessage());
     }
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<Object> handleAuthenticationException(
-            AuthenticationException ex, WebRequest request
-    ) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.CONFLICT);
-        body.put("error", "Authentication error");
-        body.put("message", ex.getMessage());
-        return new ResponseEntity<>(body, HttpStatus.CONFLICT);
+            AuthenticationException ex, WebRequest request) {
+        return buildErrorResponse(HttpStatus.UNAUTHORIZED,
+                "Authentication Error", ex.getMessage());
     }
 
     @ExceptionHandler(BookAlreadyInFavoritesException.class)
     public ResponseEntity<Object> handleBookAlreadyInFavoritesException(
-            BookAlreadyInFavoritesException ex, WebRequest request
-    ) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.CONFLICT);
-        body.put("error", "BookAlreadyInFavorites error");
-        body.put("message", ex.getMessage());
-        return new ResponseEntity<>(body, HttpStatus.CONFLICT);
+            BookAlreadyInFavoritesException ex, WebRequest request) {
+        return buildErrorResponse(HttpStatus.CONFLICT,
+                "Book Already in Favorites", ex.getMessage());
     }
 
     @ExceptionHandler(BookNotInFavoritesException.class)
     public ResponseEntity<Object> handleBookNotInFavoritesException(
-            BookNotInFavoritesException ex, WebRequest request
-    ) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.CONFLICT);
-        body.put("error", "BookNotInFavoritesException error");
-        body.put("message", ex.getMessage());
-        return new ResponseEntity<>(body, HttpStatus.CONFLICT);
+            BookNotInFavoritesException ex, WebRequest request) {
+        return buildErrorResponse(HttpStatus.BAD_REQUEST,
+                "Book Not in Favorites", ex.getMessage());
     }
 
     @ExceptionHandler(InsufficientTokensException.class)
     public ResponseEntity<Object> handleInsufficientTokensException(
-            InsufficientTokensException ex, WebRequest request
-    ) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.PAYMENT_REQUIRED);
-        body.put("error", "InsufficientTokensException error");
-        body.put("message", ex.getMessage());
-        return new ResponseEntity<>(body, HttpStatus.PAYMENT_REQUIRED);
+            InsufficientTokensException ex, WebRequest request) {
+        return buildErrorResponse(HttpStatus.PAYMENT_REQUIRED,
+                "Insufficient Tokens", ex.getMessage());
     }
 
     @ExceptionHandler(BookNotInShoppingCartException.class)
     public ResponseEntity<Object> handleBookNotInShoppingCartException(
-            BookNotInShoppingCartException ex, WebRequest request
-    ) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.BAD_REQUEST);
-        body.put("error", "BookNotInShoppingCartException error");
-        body.put("message", ex.getMessage());
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+            BookNotInShoppingCartException ex, WebRequest request) {
+        return buildErrorResponse(HttpStatus.BAD_REQUEST,
+                "Book Not in Shopping Cart", ex.getMessage());
     }
 
-    private ResponseEntity<Object> buildErrorResponse(HttpStatus status, String error, String message) {
+    private ResponseEntity<Object> buildErrorResponse(
+            HttpStatus status, String error, String message
+    ) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("status", status.value());
