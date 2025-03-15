@@ -51,6 +51,7 @@ public class SecurityConfig {
                         auth -> auth
                                 .requestMatchers(HttpMethod.GET, "/books").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/books/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/genres").permitAll()
                                 .requestMatchers(
                                         "/", "/auth/**", "/auth/callback/google/", "/health",
                                         "/error", "/swagger-ui/**", "/v3/api-docs/**")
