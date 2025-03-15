@@ -34,7 +34,6 @@ public class GenreController {
         return genreService.save(genreDto);
     }
 
-    @PreAuthorize("hasRole('MANAGER')")
     @Operation(
             summary = "Get genre by id",
             description = "Find a genre with a passed id"
@@ -45,7 +44,6 @@ public class GenreController {
         return genreService.getById(id);
     }
 
-    @PreAuthorize("hasRole('MANAGER')")
     @Operation(summary = "Get all genres", description = "Get list of all available genres")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping

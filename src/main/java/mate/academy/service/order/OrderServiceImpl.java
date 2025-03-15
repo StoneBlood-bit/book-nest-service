@@ -12,6 +12,7 @@ import mate.academy.model.ShoppingCart;
 import mate.academy.model.User;
 import mate.academy.repository.order.OrderRepository;
 import mate.academy.repository.shoppingcart.ShoppingCartRepository;
+import mate.academy.repository.user.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final ShoppingCartRepository shoppingCartRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     @Override
@@ -40,6 +42,9 @@ public class OrderServiceImpl implements OrderService {
                     "User with id " + user.getId() + " doesn't have enough tokens"
             );
         }
+
+        user.setTokens(user.getTokens() - shoppingCart.getBooks().size());
+        userRepository.save(user);
 
         Order order = new Order();
         order.setUser(user);
