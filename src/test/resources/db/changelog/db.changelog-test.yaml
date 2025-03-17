@@ -1,0 +1,3 @@
+databaseChangeLog:
+  - include:
+      file: db/changes/1-create-test-data.yaml
