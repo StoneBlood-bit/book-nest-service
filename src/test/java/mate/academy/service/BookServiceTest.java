@@ -153,7 +153,7 @@ public class BookServiceTest {
 
         Set<Genre> genres = new HashSet<>(Arrays.asList(genre));
 
-        Long validBookId = 1l;
+        Long validBookId = 1L;
         Book book = new Book();
         book.setId(validBookId);
         book.setTitle("Book");
@@ -192,7 +192,6 @@ public class BookServiceTest {
 
     @Test
     void findAll_WithFormatFilter_ShouldReturnFilteredBooks() {
-        Pageable pageable = PageRequest.of(0, 10);
         Book book = new Book();
         book.setId(1L);
         book.setTitle("Test Book");
@@ -203,6 +202,7 @@ public class BookServiceTest {
         bookResponseDto.setTitle("Test Book");
 
         List<Book> books = List.of(book);
+        Pageable pageable = PageRequest.of(0, 10);
         Page<Book> bookPage = new PageImpl<>(books, pageable, books.size());
 
         when(bookRepository.findAll(any(Specification.class), any(Pageable.class)))
@@ -219,7 +219,6 @@ public class BookServiceTest {
 
     @Test
     void findAll_WithGenreFilter_ShouldReturnFilteredBooks() {
-        Pageable pageable = PageRequest.of(0, 10);
         Book book = new Book();
         book.setId(1L);
         book.setTitle("Test Book");
@@ -229,6 +228,7 @@ public class BookServiceTest {
         bookResponseDto.setTitle("Test Book");
 
         List<Book> books = List.of(book);
+        Pageable pageable = PageRequest.of(0, 10);
         Page<Book> bookPage = new PageImpl<>(books, pageable, books.size());
 
         Mockito.when(bookRepository.findAll(any(Specification.class), any(Pageable.class)))
@@ -245,7 +245,6 @@ public class BookServiceTest {
 
     @Test
     void findAll_WithNoFilters_ShouldReturnAllBooks() {
-        Pageable pageable = PageRequest.of(0, 10);
         Book book = new Book();
         book.setId(1L);
         book.setTitle("Test Book");
@@ -255,6 +254,7 @@ public class BookServiceTest {
         bookResponseDto.setTitle("Test Book");
 
         List<Book> books = List.of(book);
+        Pageable pageable = PageRequest.of(0, 10);
         Page<Book> bookPage = new PageImpl<>(books, pageable, books.size());
 
         Mockito.when(bookRepository.findAll(any(Specification.class), any(Pageable.class)))
@@ -294,7 +294,9 @@ public class BookServiceTest {
 
         when(bookRepository.findById(bookId)).thenReturn(Optional.of(existingBook));
         when(genreService.findByIds(requestDto.getGenreIds())).thenReturn(updatedGenres);
-        when(slugGenerator.generateSlug(existingBook.getAuthor(), existingBook.getTitle(), existingBook.getId())).thenReturn(newSlug);
+        when(slugGenerator.generateSlug(
+                existingBook.getAuthor(), existingBook.getTitle(), existingBook.getId()))
+                .thenReturn(newSlug);
         when(bookRepository.save(existingBook)).thenReturn(existingBook);
         when(bookMapper.toUpdateDto(existingBook)).thenReturn(new UpdateBookResponseDto());
 
