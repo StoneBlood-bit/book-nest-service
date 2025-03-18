@@ -1,3 +1,11 @@
 databaseChangeLog:
   - include:
-      file: db/changes/1-create-test-data.yaml
+      file: db/changes/01-create-users-table.yaml
+  - include:
+      file: db/changes/02-create-genres-table.yaml
+  - include:
+      file: db/changes/03-create-books-table.yaml
+  - include:
+      file: db/changes/04-create-books-genres-table.yaml
+  - include:
+      file: db/changes/05-create-user-favorite-books-table.yaml

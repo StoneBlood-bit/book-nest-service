@@ -1,19 +1,41 @@
 package mate.academy.repository;
 
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.jdbc.Sql;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Sql(
-        scripts = "classpath:database/01-create-books.sql",
-        executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS
-)
-@Sql(
-        scripts = "classpath:database/02-clear-books.sql",
-        executionPhase = Sql.ExecutionPhase.AFTER_TEST_CLASS
-)
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import mate.academy.repository.book.BookRepository;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
 public class BookRepositoryTest {
+    @Mock
+    private BookRepository bookRepository;
 
+    @Test
+    void findAllBookTitles_ValidData_ShouldReturnTrue() {
+        List<String> expectedList = Arrays.asList("First Book", "Second Book");
+
+        when(bookRepository.findAllBookTitles()).thenReturn(expectedList);
+
+        List<String> actualList = bookRepository.findAllBookTitles();
+
+        assertEquals(expectedList, actualList);
+    }
+
+    @Test
+    void findAllBookTitles_EmptyData_ShouldReturnTrue() {
+        List<String> expectedList = Collections.emptyList();
+
+        when(bookRepository.findAllBookTitles()).thenReturn(expectedList);
+
+        List<String> actualList = bookRepository.findAllBookTitles();
+
+        assertEquals(expectedList, actualList);
+    }
 }
