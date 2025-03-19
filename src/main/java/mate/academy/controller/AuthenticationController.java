@@ -16,6 +16,8 @@ import mate.academy.security.CookieUtil;
 import mate.academy.service.facebook.FacebookOAuthService;
 import mate.academy.service.google.GoogleOAuthService;
 import mate.academy.service.user.UserService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,6 +36,7 @@ public class AuthenticationController {
     public static final String RESPONSE_CONTENT_TYPE = "text/html;charset=UTF-8";
     public static final String RESPONSE_DEFAULT_URL
             = "https://book-nest-frontend-pearl.vercel.app/redirect";
+    private static final Logger logger = LogManager.getLogger(AuthenticationService.class);
     private final UserService userService;
     private final AuthenticationService authenticationService;
     private final GoogleOAuthService googleOAuthService;
@@ -66,6 +69,7 @@ public class AuthenticationController {
             @RequestParam("code") String code,
             @RequestParam(value = "state", required = false) String redirectUrl,
             HttpServletResponse response) throws IOException {
+        logger.info("Received Google callback. Code: {}, State: {}", code, redirectUrl);
         String token = googleOAuthService.authenticationWithGoogle(code);
         cookieUtil.addTokenCookie(response, token);
         sendJsRedirect(response, redirectUrl);

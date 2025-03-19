@@ -24,7 +24,10 @@ import org.springframework.web.cors.CorsConfiguration;
 @RequiredArgsConstructor
 @Component
 public class SecurityConfig {
-    public static final String ALLOWED_URL = "https://driven-truly-mule.ngrok-free.app";
+    public static final List<String> ALLOWED_URLS = List.of(
+            "https://driven-truly-mule.ngrok-free.app",
+            "https://book-nest-frontend-pearl.vercel.app/"
+    );
     private final UserDetailsService userDetailsService;
     private final JwtAuthenticationFilter authenticationFilter;
 
@@ -38,7 +41,7 @@ public class SecurityConfig {
         return http
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration corsConfiguration = new CorsConfiguration();
-                    corsConfiguration.setAllowedOrigins(Collections.singletonList(ALLOWED_URL));
+                    corsConfiguration.setAllowedOrigins(ALLOWED_URLS);
                     corsConfiguration.setAllowedMethods(
                             List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")
                     );
