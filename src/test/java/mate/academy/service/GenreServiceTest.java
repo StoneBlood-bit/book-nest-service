@@ -131,7 +131,6 @@ public class GenreServiceTest {
 
     @Test
     void findByIds_ValidIds_ShouldReturnSetOfGenres() {
-        List<Long> ids = List.of(1L, 2L);
         Genre genre1 = new Genre();
         genre1.setId(1L);
         genre1.setName("Fiction");
@@ -139,6 +138,7 @@ public class GenreServiceTest {
         Genre genre2 = new Genre();
         genre2.setId(2L);
         genre2.setName("Fantasy");
+        List<Long> ids = List.of(1L, 2L);
 
         when(genreRepository.findAllById(ids)).thenReturn(List.of(genre1, genre2));
 

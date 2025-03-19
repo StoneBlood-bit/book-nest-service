@@ -150,7 +150,6 @@ public class ShoppingCartServiceTest {
 
     @Test
     void addBookToShoppingCart_BookAlreadyExists_ShouldNotAddDuplicate() {
-        Long userId = 1L;
         Long bookId = 10L;
         ShoppingCart shoppingCart = new ShoppingCart();
         Book book = new Book();
@@ -158,6 +157,7 @@ public class ShoppingCartServiceTest {
         shoppingCart.setBooks(new ArrayList<>());
         shoppingCart.getBooks().add(book);
 
+        Long userId = 1L;
         when(shoppingCartRepository.findByUserId(userId)).thenReturn(Optional.of(shoppingCart));
         when(bookRepository.findById(bookId)).thenReturn(Optional.of(book));
 
@@ -170,13 +170,14 @@ public class ShoppingCartServiceTest {
 
     @Test
     void removeBookFromShoppingCart_ValidUserIdAndBookId_ShouldReturnTrue() {
-        Long userId = 1L;
         Long bookId = 10L;
         ShoppingCart shoppingCart = new ShoppingCart();
         Book book = new Book();
         book.setId(bookId);
         shoppingCart.setBooks(new ArrayList<>());
         shoppingCart.getBooks().add(book);
+
+        Long userId = 1L;
 
         when(shoppingCartRepository.findByUserId(userId)).thenReturn(Optional.of(shoppingCart));
         when(bookRepository.findById(bookId)).thenReturn(Optional.of(book));

@@ -18,6 +18,8 @@ public class BookRequestDto {
 
     private int releaseYear;
 
+    private String description;
+
     @NotEmpty
     private List<Long> genreIds;
 
