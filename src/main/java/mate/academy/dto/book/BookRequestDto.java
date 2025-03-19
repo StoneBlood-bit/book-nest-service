@@ -16,6 +16,8 @@ public class BookRequestDto {
     @NotBlank
     private String condition;
 
+    private int releaseYear;
+
     @NotEmpty
     private List<Long> genreIds;
 

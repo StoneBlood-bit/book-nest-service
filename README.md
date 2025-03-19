@@ -138,7 +138,8 @@ Request:
     "author": "Nicholas SparKs",
     "genreIds": [4, 5]
     "condition": "Like New",
-    "description": "book for a tests"
+    "description": "book for a tests",
+    "releaseYear": 1999
 }
 ````
 ````
