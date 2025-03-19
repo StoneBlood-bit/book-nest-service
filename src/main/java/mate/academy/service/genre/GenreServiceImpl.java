@@ -29,7 +29,6 @@ public class GenreServiceImpl implements GenreService {
         return genreMapper.toDto(genreRepository.save(genre));
     }
 
-    @Transactional(readOnly = true)
     @Override
     public GenreDto getById(Long id) {
         Genre genre = genreRepository.findById(id).orElseThrow(

@@ -16,6 +16,9 @@ import mate.academy.security.CookieUtil;
 import mate.academy.service.facebook.FacebookOAuthService;
 import mate.academy.service.google.GoogleOAuthService;
 import mate.academy.service.user.UserService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,8 +35,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthenticationController {
     public static final String RESPONSE_CONTENT_TYPE = "text/html;charset=UTF-8";
-    public static final String RESPONSE_WRITE_CONTENT = "<script>window.location.href="
-            + "'https://driven-truly-mule.ngrok-free.app/redirect';</script>";
+    public static final String RESPONSE_DEFAULT_URL
+            = "https://book-nest-frontend-pearl.vercel.app/redirect";
+    private static final Logger logger = LogManager.getLogger(AuthenticationService.class);
     private final UserService userService;
     private final AuthenticationService authenticationService;
     private final GoogleOAuthService googleOAuthService;
@@ -64,25 +68,37 @@ public class AuthenticationController {
     @GetMapping("/callback/google")
     public void handleGoogleCallback(
             @RequestParam("code") String code,
+            @RequestParam(value = "state", required = false) String redirectUrl,
             HttpServletResponse response) throws IOException {
+        logger.info("Received Google callback. Code: {}, State: {}", code, redirectUrl);
         String token = googleOAuthService.authenticationWithGoogle(code);
         cookieUtil.addTokenCookie(response, token);
-        sendJsRedirect(response);
+        sendJsRedirect(response, redirectUrl);
     }
 
     @Operation(summary = "login user", description = "user authentication from Facebook")
     @GetMapping("/callback/facebook")
     public void handleFacebookCallback(
             @RequestParam("code") String code,
+            @RequestParam(value = "state", required = false) String redirectUrl,
             HttpServletResponse response
     ) throws IOException {
         String token = facebookOAuthService.authenticationWithFacebook(code);
         cookieUtil.addTokenCookie(response, token);
-        sendJsRedirect(response);
+        sendJsRedirect(response, redirectUrl);
     }
 
-    private void sendJsRedirect(HttpServletResponse response) throws IOException {
+    @PostMapping("/signout")
+    public ResponseEntity<String> signOut(HttpServletResponse response) {
+        cookieUtil.clearTokenCookie(response);
+        return ResponseEntity.ok("User signed out successfully.");
+    }
+
+    private void sendJsRedirect(
+            HttpServletResponse response, String redirectUrl
+    ) throws IOException {
         response.setContentType(RESPONSE_CONTENT_TYPE);
-        response.getWriter().write(RESPONSE_WRITE_CONTENT);
+        String targetUrl = (redirectUrl != null) ? redirectUrl : RESPONSE_DEFAULT_URL;
+        response.getWriter().write("<script>window.location.href='" + targetUrl + "';</script>");
     }
 }
