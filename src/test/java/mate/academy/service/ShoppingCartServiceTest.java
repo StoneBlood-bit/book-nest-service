@@ -1,45 +1,31 @@
 package mate.academy.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
-import java.util.*;
-
-import mate.academy.component.SlugGenerator;
-import mate.academy.dto.book.BookRequestDto;
-import mate.academy.dto.book.BookResponseDto;
-import mate.academy.dto.book.UpdateBookRequestDto;
-import mate.academy.dto.book.UpdateBookResponseDto;
+import java.util.ArrayList;
+import java.util.Optional;
 import mate.academy.dto.shoppingcart.ShoppingCartResponseDto;
 import mate.academy.exception.BookNotInShoppingCartException;
 import mate.academy.exception.EntityNotFoundException;
-import mate.academy.mapper.BookMapper;
 import mate.academy.mapper.ShoppingCartMapper;
 import mate.academy.model.Book;
-import mate.academy.model.Genre;
 import mate.academy.model.ShoppingCart;
 import mate.academy.model.User;
 import mate.academy.repository.book.BookRepository;
 import mate.academy.repository.shoppingcart.ShoppingCartRepository;
-import mate.academy.repository.user.UserRepository;
-import mate.academy.service.book.BookServiceImpl;
-import mate.academy.service.genre.GenreService;
-import mate.academy.service.image.ImageService;
 import mate.academy.service.shoppingcart.ShoppingCartServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 
 @ExtendWith(MockitoExtension.class)
 public class ShoppingCartServiceTest {
