@@ -18,6 +18,7 @@ import mate.academy.service.google.GoogleOAuthService;
 import mate.academy.service.user.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -85,6 +86,12 @@ public class AuthenticationController {
         String token = facebookOAuthService.authenticationWithFacebook(code);
         cookieUtil.addTokenCookie(response, token);
         sendJsRedirect(response, redirectUrl);
+    }
+
+    @PostMapping("/signout")
+    public ResponseEntity<String> signOut(HttpServletResponse response) {
+        cookieUtil.clearTokenCookie(response);
+        return ResponseEntity.ok("User signed out successfully.");
     }
 
     private void sendJsRedirect(
