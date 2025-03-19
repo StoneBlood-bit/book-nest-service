@@ -1,6 +1,5 @@
 package mate.academy.config;
 
-import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import mate.academy.security.JwtAuthenticationFilter;

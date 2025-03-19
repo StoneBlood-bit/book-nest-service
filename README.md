@@ -34,6 +34,8 @@ Response:
     "token": "value"
 }
 ````
+- **sign out** POST ``/auth/signout``
+``Response: User signed out successfully.``
 
 ### OAuth
 - **google** GET ``/auth/callback/google?code=``
