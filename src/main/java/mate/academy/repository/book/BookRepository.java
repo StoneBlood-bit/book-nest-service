@@ -12,8 +12,8 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
     @Query("SELECT b.title FROM Book b")
     List<String> findAllBookTitles();
 
-    @Query("SELECT b FROM Book b WHERE " +
-            "(b.author IN :authors OR b.genre IN :genres) AND b.id NOT IN :excludedBookIds")
+    @Query("SELECT b FROM Book b JOIN b.genres g WHERE " +
+            "(b.author IN :authors OR g.name IN :genres) AND b.id NOT IN :excludedBookIds")
     Set<Book> findBooksByGenreOrAuthor(@Param("genres") Set<String> genres,
                                         @Param("authors") Set<String> authors,
                                         @Param("excludedBookIds") Set<Long> excludedBookIds);
