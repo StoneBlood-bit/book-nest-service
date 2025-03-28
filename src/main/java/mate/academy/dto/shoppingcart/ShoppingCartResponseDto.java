@@ -5,8 +5,7 @@ import lombok.Data;
 import mate.academy.dto.book.BookResponseDto;
 
 @Data
-public class
-ShoppingCartResponseDto {
+public class ShoppingCartResponseDto {
     private Long id;
 
     private Long userId;
