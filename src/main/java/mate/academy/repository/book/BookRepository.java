@@ -14,7 +14,14 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
 
     @Query("SELECT b FROM Book b WHERE " +
             "(b.author IN :authors OR b.genre IN :genres) AND b.id NOT IN :excludedBookIds")
-    List<Book> findBooksByGenreOrAuthor(@Param("genres") Set<String> genres,
+    Set<Book> findBooksByGenreOrAuthor(@Param("genres") Set<String> genres,
                                         @Param("authors") Set<String> authors,
                                         @Param("excludedBookIds") Set<Long> excludedBookIds);
+
+    @Query(value = "SELECT * FROM books b WHERE b.id NOT IN :excludedBookIds "
+            + "ORDER BY RANDOM() LIMIT :limit", nativeQuery = true)
+    List<Book> findRandomBooks(
+            @Param("limit") int limit,
+            @Param("excludedBookIds") Set<Long> excludedBookIds
+    );
 }
