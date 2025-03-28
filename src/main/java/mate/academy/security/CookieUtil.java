@@ -25,4 +25,13 @@ public class CookieUtil {
         cookie.setAttribute(COOKIE_ATTRIBUTE_NAME, COOKIE_ATTRIBUTE_VALUE);
         response.addCookie(cookie);
     }
+
+    public void clearTokenCookie(HttpServletResponse response) {
+        Cookie cookie = new Cookie(TOKEN_COOKIE_NAME, null);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+    }
 }

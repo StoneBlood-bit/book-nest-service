@@ -34,6 +34,8 @@ Response:
     "token": "value"
 }
 ````
+- **sign out** POST ``/auth/signout``
+``Response: User signed out successfully.``
 
 ### OAuth
 - **google** GET ``/auth/callback/google?code=``
@@ -138,7 +140,8 @@ Request:
     "author": "Nicholas SparKs",
     "genreIds": [4, 5]
     "condition": "Like New",
-    "description": "book for a tests"
+    "description": "book for a tests",
+    "releaseYear": 1999
 }
 ````
 ````
@@ -342,6 +345,41 @@ Response:
 ````
 Response:
 []
+````
+### Recommendation
+- **get recommendations for user** GET ``/recommendations``
+````
+Response:
+[
+    {
+        "id": 15,
+        "title": "The Best Of Me",
+        "author": "Nicholas SparKs",
+        "condition": "Like New",
+        "description": null,
+        "slug": "nicholas-sparks-the-best-of-me-15",
+        "format": null,
+        "genres": [
+            "Fictions",
+            "Novella"
+        ],
+        "releaseYear": 0
+    },
+    {
+        "id": 16,
+        "title": "To test about donor",
+        "author": "Nicholas SparKs",
+        "condition": "Like New",
+        "description": null,
+        "slug": "nicholas-sparks-to-test-about-donor-16",
+        "format": null,
+        "genres": [
+            "Fictions",
+            "Novella"
+        ],
+        "releaseYear": 0
+    }
+]
 ````
 ### Titles
 - **Get all book titles** GET ``/books/titles``
