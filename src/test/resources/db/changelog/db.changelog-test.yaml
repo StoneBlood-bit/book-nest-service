@@ -9,3 +9,11 @@ databaseChangeLog:
       file: db/changes/04-create-books-genres-table.yaml
   - include:
       file: db/changes/05-create-user-favorite-books-table.yaml
+  - include:
+      file: db/changes/06-create-shopping-carts-table.yaml
+  - include:
+      file: db/changes/07-create-shopping-carts-books-table.yaml
+  - include:
+      file: db/changes/08-create-orders-table.yaml
+  - include:
+      file: db/changes/09-create-orders-books-table.yaml

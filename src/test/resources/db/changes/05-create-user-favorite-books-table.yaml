@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 05-create-user-favorite-books-table
+      id: create-user-favorite-books-table
       author: developer
       changes:
         - createTable:
@@ -21,10 +21,10 @@ databaseChangeLog:
             baseColumnNames: user_id
             referencedTableName: users
             referencedColumnNames: id
-            constraintName: fk_user_favorite_books_user
+            constraintName: fk_user_favorite_books_user_id
         - addForeignKeyConstraint:
             baseTableName: user_favorite_books
             baseColumnNames: book_id
             referencedTableName: books
             referencedColumnNames: id
-            constraintName: fk_user_favorite_books_book
+            constraintName: fk_user_favorite_books_book_id

@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 02-create-genres-table
+      id: create-genres-table
       author: developer
       changes:
         - createTable:
@@ -21,7 +21,6 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: is_deleted
-                  type: tinyint(1)
-                  defaultValue: 0
+                  type: TINYINT
                   constraints:
                     nullable: false
