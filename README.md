@@ -36,6 +36,7 @@ Response:
 ````
 - **sign out** POST ``/auth/signout``
 ``Response: User signed out successfully.``
+- **validate token** GET ``/auth/validate-token`` ``Response: 200 OK``
 
 ### OAuth
 - **google** GET ``/auth/callback/google?code=``
