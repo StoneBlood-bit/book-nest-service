@@ -37,4 +37,8 @@ public class AuthenticationService {
         cookieUtil.addTokenCookie(response, token);
         return new UserLoginResponseDto(token);
     }
+
+    public boolean isTokenValid(String token) {
+        return token != null && jwtUtil.isValidToken(token);
+    }
 }

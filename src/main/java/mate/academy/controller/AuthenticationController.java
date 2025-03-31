@@ -18,7 +18,9 @@ import mate.academy.service.google.GoogleOAuthService;
 import mate.academy.service.user.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -92,6 +94,15 @@ public class AuthenticationController {
     public ResponseEntity<String> signOut(HttpServletResponse response) {
         cookieUtil.clearTokenCookie(response);
         return ResponseEntity.ok("User signed out successfully.");
+    }
+
+    @GetMapping("/validate-token")
+    public ResponseEntity<Void> validateToken(
+            @CookieValue(name = "token", required = false) String token
+    ) {
+        return authenticationService.isTokenValid(token)
+                ? ResponseEntity.ok().build()
+                : ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     private void sendJsRedirect(
