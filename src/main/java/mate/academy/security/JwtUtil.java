@@ -9,12 +9,15 @@ import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import java.util.function.Function;
+
+import mate.academy.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class JwtUtil {
+    public static final Long SHORT_EXPIRATION = 10L;
     private Key secret;
 
     @Value("${jwt.expiration}")
@@ -30,6 +33,15 @@ public class JwtUtil {
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(secret)
+                .compact();
+    }
+
+    public String generateShortLivedToken(User user) {
+        return Jwts.builder()
+                .setSubject(user.getEmail())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + SHORT_EXPIRATION))
                 .signWith(secret)
                 .compact();
     }
