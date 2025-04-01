@@ -20,6 +20,8 @@ public class BookRequestDto {
 
     private String description;
 
+    private String format;
+
     @NotEmpty
     private List<Long> genreIds;
 
