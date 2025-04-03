@@ -1,26 +1,26 @@
 databaseChangeLog:
   - changeSet:
-      id: create-genres-table
+      id: create-blacklisted-tokens-table
       author: developer
       changes:
         - createTable:
-            tableName: genres
+            tableName: blacklisted_tokens
             columns:
               - column:
                   name: id
-                  type: BIGINT
+                  type: bigint
                   autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: name
-                  type: VARCHAR(255)
+                  name: token
+                  type: varchar(500)
                   constraints:
-                    unique: true
                     nullable: false
+                    unique: true
               - column:
-                  name: is_deleted
-                  type: TINYINT
+                  name: expiration_time
+                  type: timestamp
                   constraints:
                     nullable: false

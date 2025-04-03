@@ -23,4 +23,6 @@ public interface BookService {
     void delete(Long id);
 
     List<String> findAllBookTitles();
+
+    void updateBookImage(Long bookId, byte[] updatedImage);
 }

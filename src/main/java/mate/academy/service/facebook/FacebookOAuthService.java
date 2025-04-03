@@ -7,6 +7,7 @@ import mate.academy.model.User;
 import mate.academy.repository.user.UserRepository;
 import mate.academy.security.AuthenticationService;
 import mate.academy.security.JwtUtil;
+import mate.academy.service.shoppingcart.ShoppingCartService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.core.env.Environment;
@@ -40,6 +41,7 @@ public class FacebookOAuthService {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
     private final Environment env;
+    private final ShoppingCartService shoppingCartService;
 
     @Transactional
     public String authenticationWithFacebook(String code) {
@@ -87,7 +89,9 @@ public class FacebookOAuthService {
             newUser.setTokens(0);
             newUser.setRole(User.Role.CUSTOMER);
             newUser.setDeleted(false);
-            return userRepository.save(newUser);
+            User savedUser = userRepository.save(newUser);
+            shoppingCartService.createShoppingCart(savedUser);
+            return savedUser;
         });
 
         logger.error("Method authenticationWithFacebook was called, user: {}", user.getEmail());

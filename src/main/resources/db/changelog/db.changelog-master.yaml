@@ -15,3 +15,9 @@ databaseChangeLog:
       file: db/changelog/changes/14-create-orders-table.yaml
   - include:
       file: db/changelog/changes/15-create-orders-books-table.yaml
+  - include:
+      file: db/changelog/changes/16-change-description-to-text.yaml
+  - include:
+      file: db/changelog/changes/17-fix-description-type.yaml
+  - include:
+      file: db/changelog/changes/18-create-blacklisted-tokens-table.yaml

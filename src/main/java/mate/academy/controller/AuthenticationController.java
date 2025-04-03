@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import mate.academy.dto.user.UserLoginRequestDto;
 import mate.academy.dto.user.UserLoginResponseDto;
@@ -13,15 +14,20 @@ import mate.academy.dto.user.UserRegistrationResponseDto;
 import mate.academy.exception.RegistrationException;
 import mate.academy.security.AuthenticationService;
 import mate.academy.security.CookieUtil;
+import mate.academy.security.JwtUtil;
+import mate.academy.service.blacklisted.BlacklistedTokenService;
 import mate.academy.service.facebook.FacebookOAuthService;
 import mate.academy.service.google.GoogleOAuthService;
 import mate.academy.service.user.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthenticationController {
+    public static final int TOKEN_INDEX_SHORT = 7;
     public static final String RESPONSE_CONTENT_TYPE = "text/html;charset=UTF-8";
     public static final String RESPONSE_DEFAULT_URL
             = "https://book-nest-frontend-pearl.vercel.app/redirect";
@@ -43,6 +50,8 @@ public class AuthenticationController {
     private final GoogleOAuthService googleOAuthService;
     private final FacebookOAuthService facebookOAuthService;
     private final CookieUtil cookieUtil;
+    private final JwtUtil jwtUtil;
+    private final BlacklistedTokenService blacklistedTokenService;
 
     @Operation(summary = "login user", description = "user authentication")
     @PostMapping("/login")
@@ -89,9 +98,28 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signout")
-    public ResponseEntity<String> signOut(HttpServletResponse response) {
+    public ResponseEntity<String> signOut(
+            @RequestHeader("Authorization") String authHeader,
+            HttpServletResponse response
+    ) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.badRequest().body("Invalid token");
+        }
+        String token = authHeader.substring(TOKEN_INDEX_SHORT);
+        LocalDateTime expirationTime = jwtUtil.getExpiration(token);
+
+        blacklistedTokenService.addTokenToBlackList(token, expirationTime);
         cookieUtil.clearTokenCookie(response);
         return ResponseEntity.ok("User signed out successfully.");
+    }
+
+    @GetMapping("/validate-token")
+    public ResponseEntity<Void> validateToken(
+            @CookieValue(name = "token", required = false) String token
+    ) {
+        return authenticationService.isTokenValid(token)
+                ? ResponseEntity.ok().build()
+                : ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     private void sendJsRedirect(

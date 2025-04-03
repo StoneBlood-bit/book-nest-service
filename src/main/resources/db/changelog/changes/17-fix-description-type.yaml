@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: fix-description-type
+      author: developer
+      changes:
+        - sql:
+            dbms: mysql
+            sql: ALTER TABLE books MODIFY COLUMN description VARCHAR(255) NULL;
+        - sql:
+            dbms: mysql
+            sql: ALTER TABLE books MODIFY COLUMN description TEXT;

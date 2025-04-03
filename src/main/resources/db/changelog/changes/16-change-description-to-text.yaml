@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: change-description-to-text
+      author: developer
+      changes:
+        - modifyDataType:
+            tableName: books
+            columnName: description
+            newDataType: text

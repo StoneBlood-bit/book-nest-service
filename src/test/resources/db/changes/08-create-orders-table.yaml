@@ -1,46 +1,43 @@
 databaseChangeLog:
   - changeSet:
-      id: create-users-table
+      id: create-orders-table
       author: developer
       changes:
         - createTable:
-            tableName: users
+            tableName: orders
             columns:
               - column:
                   name: id
-                  type: BIGINT
+                  type: bigint
                   autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: email
-                  type: VARCHAR(255)
-                  constraints:
-                    nullable: false
-                    unique: true
-              - column:
-                  name: password
-                  type: VARCHAR(255)
+                  name: user_id
+                  type: bigint
                   constraints:
                     nullable: false
               - column:
-                  name: full_name
-                  type: VARCHAR(255)
+                  name: status
+                  type: varchar(255)
                   constraints:
                     nullable: false
               - column:
-                  name: tokens
-                  type: INT
-                  constraints:
-                    nullable: false
-              - column:
-                  name: role
-                  type: VARCHAR(50)
+                  name: created_at
+                  type: timestamp
                   constraints:
                     nullable: false
               - column:
                   name: is_deleted
-                  type: TINYINT(1)
+                  type: tinyint(1)
+                  defaultValueBoolean: 0
                   constraints:
                     nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: orders
+            baseColumnNames: user_id
+            constraintName: fk_orders_user
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE

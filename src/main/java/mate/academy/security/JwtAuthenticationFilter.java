@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import mate.academy.service.blacklisted.BlacklistedTokenService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpHeaders;
@@ -25,10 +26,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final Logger logger = LogManager.getLogger(AuthenticationService.class);
-
     private static final String BEARER_PREFIX = "Bearer ";
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
+    private final BlacklistedTokenService blacklistedTokenService;
 
     private final Map<String, List<String>> excludedPathsMap = Map.of(
             "/auth/", List.of("GET", "POST"),
@@ -51,6 +52,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = getToken(request);
 
         if (token != null && jwtUtil.isValidToken(token)) {
+            if (blacklistedTokenService.isTokenBlacklisted(token)) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Token is blacklisted");
+                return;
+            }
+
             String username = jwtUtil.getUsername(token);
 
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
