@@ -98,7 +98,10 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signout")
-    public ResponseEntity<String> signOut(@RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<String> signOut(
+            @RequestHeader("Authorization") String authHeader,
+            HttpServletResponse response
+    ) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return ResponseEntity.badRequest().body("Invalid token");
         }
@@ -106,7 +109,7 @@ public class AuthenticationController {
         LocalDateTime expirationTime = jwtUtil.getExpiration(token);
 
         blacklistedTokenService.addTokenToBlackList(token, expirationTime);
-
+        cookieUtil.clearTokenCookie(response);
         return ResponseEntity.ok("User signed out successfully.");
     }
 
