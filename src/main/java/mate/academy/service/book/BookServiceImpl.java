@@ -151,6 +151,18 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findAllBookTitles();
     }
 
+    @Override
+    @Transactional
+    public void updateBookImage(Long bookId, byte[] updatedImage) {
+        Book existingBook = bookRepository.findById(bookId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Can't find book with id: " + bookId));
+
+        existingBook.setImage(updatedImage);
+
+        bookRepository.save(existingBook);
+    }
+
     private Pageable getAdjustedPageable(String sort, Pageable pageable) {
         if (sort != null && !sort.isEmpty()) {
             String[] sortParams = sort.split(":");

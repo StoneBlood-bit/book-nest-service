@@ -255,9 +255,13 @@ Response:
 }
 ````
 ### Image
-- **get image by book`s id** GET ``/books/image/{booksId}``
+- **get an image by book`s id** GET ``/books/image/{booksId}``
 ````
 The response contains an image in png format
+````
+- **put an image by book`s id** PUT ``books/{bookId}/image``
+````
+Response: Image updated successfully
 ````
 ### Favorites
 - **add a book to favorites** POST ``/favorites``

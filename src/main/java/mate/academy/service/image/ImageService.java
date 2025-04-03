@@ -32,7 +32,8 @@ public class ImageService {
         return bookRepository.findById(bookId)
                 .map(Book::getImage)
                 .orElseThrow(
-                        () -> new EntityNotFoundException("Book not found with id: " + bookId)
+                        () -> new EntityNotFoundException(
+                                "Image not found for book with id: " + bookId)
                 );
     }
 }
