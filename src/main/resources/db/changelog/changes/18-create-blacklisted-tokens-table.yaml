@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-blacklisted-tokens-table
+      author: developer
+      changes:
+        - createTable:
+            tableName: blacklisted_tokens
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: token
+                  type: varchar(500)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: expiration_time
+                  type: timestamp
+                  constraints:
+                    nullable: false
