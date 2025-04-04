@@ -24,4 +24,7 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
             @Param("limit") int limit,
             @Param("excludedBookIds") Set<Long> excludedBookIds
     );
+
+    @Query(value = "SELECT * FROM books ORDER BY RAND() LIMIT 9", nativeQuery = true)
+    List<Book> findRandomBooks();
 }
