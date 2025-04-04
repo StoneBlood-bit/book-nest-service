@@ -76,5 +76,4 @@ public class BookRecommendationServiceImpl implements BookRecommendationService 
                 .collect(Collectors.toList());
     }
 
-
 }
