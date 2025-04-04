@@ -68,4 +68,12 @@ public class BookRecommendationServiceImpl implements BookRecommendationService 
                 .map(bookMapper::toDto)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<BookResponseDto> getRecommendationsForGuest() {
+        return bookRepository.findRandomBooksForGuest().stream()
+                .map(bookMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
 }
