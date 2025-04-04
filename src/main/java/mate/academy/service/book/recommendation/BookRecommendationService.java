@@ -5,4 +5,6 @@ import mate.academy.dto.book.BookResponseDto;
 
 public interface BookRecommendationService {
     List<BookResponseDto> getRecommendationsForUser(Long userId);
+
+    public List<BookResponseDto> getRecommendationsForGuest();
 }
