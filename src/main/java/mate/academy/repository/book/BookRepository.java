@@ -3,6 +3,7 @@ package mate.academy.repository.book;
 import java.util.List;
 import java.util.Set;
 import mate.academy.model.Book;
+import mate.academy.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -27,4 +28,8 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
 
     @Query(value = "SELECT * FROM books ORDER BY RAND() LIMIT 9", nativeQuery = true)
     List<Book> findRandomBooksForGuest();
+
+    @Query("SELECT b FROM Book b WHERE b.receiver = :user")
+    List<Book> findReceivedBooks(@Param("user") User user);
+
 }
