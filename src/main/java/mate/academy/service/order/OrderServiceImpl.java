@@ -7,6 +7,7 @@ import mate.academy.dto.order.OrderResponseDto;
 import mate.academy.exception.EntityNotFoundException;
 import mate.academy.exception.InsufficientTokensException;
 import mate.academy.mapper.OrderMapper;
+import mate.academy.model.Book;
 import mate.academy.model.Order;
 import mate.academy.model.ShoppingCart;
 import mate.academy.model.User;
@@ -51,6 +52,12 @@ public class OrderServiceImpl implements OrderService {
         order.setBooks(new ArrayList<>(shoppingCart.getBooks()));
         order.setOrderStatus(Order.OrderStatus.NEW);
         order.setCreatedAt(LocalDateTime.now());
+
+        for (Book book: shoppingCart.getBooks()) {
+            book.setReceiver(user);
+            book.setDeleted(true);
+            user.getReceivedBooks().add(book);
+        }
 
         shoppingCart.getBooks().clear();
         shoppingCartRepository.save(shoppingCart);
