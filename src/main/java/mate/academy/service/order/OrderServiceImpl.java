@@ -55,7 +55,6 @@ public class OrderServiceImpl implements OrderService {
 
         for (Book book: shoppingCart.getBooks()) {
             book.setReceiver(user);
-            book.setDeleted(true);
             user.getReceivedBooks().add(book);
         }
 

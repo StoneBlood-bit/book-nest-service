@@ -102,6 +102,10 @@ public class BookServiceImpl implements BookService {
                     criteriaBuilder.equal(root.get("format"), format));
         }
 
+        spec = spec.and((root, query, criteriaBuilder) ->
+                criteriaBuilder.isNull(root.get("receiver"))
+        );
+
         Pageable adjustedPageable = getAdjustedPageable(sort, pageable);
         Page<Book> bookPage = bookRepository.findAll(spec, adjustedPageable);
         return bookPage.map(bookMapper::toDto);
