@@ -99,13 +99,13 @@ public class AuthenticationController {
 
     @PostMapping("/signout")
     public ResponseEntity<String> signOut(
-            @RequestHeader("Authorization") String authHeader,
+            @CookieValue(value = "token", required = false) String token,
             HttpServletResponse response
     ) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        if (token == null) {
             return ResponseEntity.badRequest().body("Invalid token");
         }
-        String token = authHeader.substring(TOKEN_INDEX_SHORT);
+
         LocalDateTime expirationTime = jwtUtil.getExpiration(token);
 
         blacklistedTokenService.addTokenToBlackList(token, expirationTime);
