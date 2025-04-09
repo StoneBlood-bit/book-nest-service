@@ -1,5 +1,6 @@
 package mate.academy.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import mate.academy.dto.book.BookResponseDto;
 import mate.academy.dto.book.UpdateBookRequestDto;
 import mate.academy.dto.book.UpdateBookResponseDto;
 import mate.academy.exception.EntityNotFoundException;
+import mate.academy.exception.InvalidContentTypeException;
 import mate.academy.model.User;
 import mate.academy.service.book.BookService;
 import mate.academy.service.image.ImageService;
@@ -91,7 +93,14 @@ public class BookController {
     @PutMapping("/{bookId}/image")
     public ResponseEntity<String> updateBookImage(
             @PathVariable Long bookId,
-            @RequestParam("image") MultipartFile image) {
+            @RequestParam("image") MultipartFile image,
+            HttpServletRequest request) {
+        String contentType = request.getContentType();
+        if (contentType == null || !contentType.startsWith("multipart/form-data")) {
+            throw new InvalidContentTypeException(
+                    "Invalid Content-Type: received '" + contentType
+                            + "', but expected 'multipart/form-data'");
+        }
         try {
             byte[] updatedImage = imageService.updateImage(image, null);
             bookService.updateBookImage(bookId, updatedImage);
