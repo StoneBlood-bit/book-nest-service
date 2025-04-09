@@ -21,14 +21,14 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
                                         @Param("excludedBookIds") Set<Long> excludedBookIds);
 
     @Query(value = "SELECT * FROM books b WHERE b.id NOT IN :excludedBookIds "
-            + "AND b.receiver IS NULL "
+            + "AND b.receiver_id IS NULL "
             + "ORDER BY RAND() LIMIT :limit", nativeQuery = true)
     List<Book> findRandomBooks(
             @Param("limit") int limit,
             @Param("excludedBookIds") Set<Long> excludedBookIds
     );
 
-    @Query(value = "SELECT * FROM books WHERE receiver IS NULL "
+    @Query(value = "SELECT * FROM books WHERE receiver_id IS NULL "
             + "ORDER BY RAND() LIMIT 9", nativeQuery = true)
     List<Book> findRandomBooksForGuest();
 }
