@@ -53,14 +53,25 @@ public class GoogleOAuthService {
         params.add("client_secret", clientSecret);
 
         String tokenUri = env.getProperty("google.token-uri");
+
+        logger.info("Sending POST request to Google for access token with parameters: {}",
+                params);
+
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
+
         ResponseEntity<Map> response = restTemplate.postForEntity(tokenUri, request, Map.class);
 
+        logger.info("Response from Google for access token: Status code: {}, Response: {}",
+                response.getStatusCode(), response.getBody());
+
         if (!response.getStatusCode().is2xxSuccessful()) {
+            logger.error("Failed to get access token from Google. Status code: {}, Body: {}",
+                    response.getStatusCode(), response.getBody());
             throw new AuthenticationException("Error getting access token from Google");
         }
 
         String accessToken = (String) response.getBody().get("access_token");
+        logger.info("Received access token from Google: {}", accessToken);
 
         String userInfoUri = env.getProperty("google.user-info-uri");
         HttpHeaders userinfoHeaders = new HttpHeaders();
@@ -71,11 +82,17 @@ public class GoogleOAuthService {
                 userInfoUri, HttpMethod.GET, userInfoRequest, Map.class
         );
 
+        logger.info("Response from Google for user info: Status code: {}, Response: {}",
+                userInfoResponse.getStatusCode(), userInfoResponse.getBody());
+
         if (!userInfoResponse.getStatusCode().is2xxSuccessful()) {
+            logger.error("Failed to get user information from Google. Status code: {}, Body: {}",
+                    userInfoResponse.getStatusCode(), userInfoResponse.getBody());
             throw new AuthenticationException("Error getting user information");
         }
 
         Map<String, Object> userInfo = userInfoResponse.getBody();
+        logger.info("Received user info: {}", userInfo);
 
         String email = (String) userInfo.get("email");
         String name = (String) userInfo.get("name");
