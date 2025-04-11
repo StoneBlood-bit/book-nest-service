@@ -11,6 +11,7 @@ public class CookieUtil {
     private static final String COOKIE_ATTRIBUTE_NAME = "SameSite";
     private static final String COOKIE_ATTRIBUTE_VALUE = "None";
     private static final int COOKIE_MAX_AGE = 30 * 24 * 60 * 60;
+    private static final String COOKIE_DOMAIN = "booknest.net.ua";
 
     public void addTokenCookie(HttpServletResponse response, String token) throws IOException {
         if (token == null || token.isBlank()) {
@@ -21,6 +22,7 @@ public class CookieUtil {
         cookie.setHttpOnly(true);
         cookie.setSecure(true);
         cookie.setPath("/");
+        cookie.setDomain(COOKIE_DOMAIN);
         cookie.setMaxAge(COOKIE_MAX_AGE);
         cookie.setAttribute(COOKIE_ATTRIBUTE_NAME, COOKIE_ATTRIBUTE_VALUE);
         response.addCookie(cookie);
@@ -31,6 +33,7 @@ public class CookieUtil {
         cookie.setHttpOnly(true);
         cookie.setSecure(true);
         cookie.setPath("/");
+        cookie.setDomain(COOKIE_DOMAIN);
         cookie.setMaxAge(0);
         cookie.setAttribute(COOKIE_ATTRIBUTE_NAME, COOKIE_ATTRIBUTE_VALUE);
         response.addCookie(cookie);
