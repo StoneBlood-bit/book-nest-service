@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -99,13 +98,13 @@ public class AuthenticationController {
 
     @PostMapping("/signout")
     public ResponseEntity<String> signOut(
-            @RequestHeader("Authorization") String authHeader,
+            @CookieValue(value = "token", required = false) String token,
             HttpServletResponse response
     ) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        if (token == null) {
             return ResponseEntity.badRequest().body("Invalid token");
         }
-        String token = authHeader.substring(TOKEN_INDEX_SHORT);
+
         LocalDateTime expirationTime = jwtUtil.getExpiration(token);
 
         blacklistedTokenService.addTokenToBlackList(token, expirationTime);

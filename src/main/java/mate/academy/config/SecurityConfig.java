@@ -25,7 +25,8 @@ import org.springframework.web.cors.CorsConfiguration;
 public class SecurityConfig {
     public static final List<String> ALLOWED_URLS = List.of(
             "https://driven-truly-mule.ngrok-free.app",
-            "https://book-nest-frontend-pearl.vercel.app/"
+            "https://book-nest-frontend-pearl.vercel.app/",
+            "https://booknest.net.ua"
     );
     private final UserDetailsService userDetailsService;
     private final JwtAuthenticationFilter authenticationFilter;
@@ -54,6 +55,8 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/books").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/books/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/genres").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/guest/recommendations")
+                                .permitAll()
                                 .requestMatchers(
                                         "/", "/auth/**", "/auth/callback/google/", "/health",
                                         "/error", "/swagger-ui/**", "/v3/api-docs/**")

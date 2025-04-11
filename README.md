@@ -386,6 +386,10 @@ Response:
     }
 ]
 ````
+- **Get recommendations for guest GET ``guest/recommendations``
+````
+Response contains list of 9 books
+````
 ### Titles
 - **Get all book titles** GET ``/books/titles``
 ````

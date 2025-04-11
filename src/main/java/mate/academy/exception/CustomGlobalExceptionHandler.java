@@ -94,6 +94,13 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
                 "Book Not in Shopping Cart", ex.getMessage());
     }
 
+    @ExceptionHandler(InvalidContentTypeException.class)
+    public ResponseEntity<Object> handleInvalidContentType(
+            InvalidContentTypeException ex, WebRequest request) {
+        return buildErrorResponse(HttpStatus.UNSUPPORTED_MEDIA_TYPE,
+                "Invalid Content-Type", ex.getMessage());
+    }
+
     private ResponseEntity<Object> buildErrorResponse(
             HttpStatus status, String error, String message
     ) {
